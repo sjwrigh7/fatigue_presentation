@@ -1,0 +1,134 @@
+/* VIPR reveal.js theme */
+
+/* Import a clean sans font */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;700&display=swap');
+
+:root {
+  --backblue: #394957;
+  --lightsilver: #ebedf0;
+  --corange: #f36f20;
+}
+
+/* Base slide background and text */
+.reveal {
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--backblue);
+  color: var(--lightsilver);
+}
+
+/* Headings */
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h5,
+.reveal h6,
+.reveal h4 {
+  color: var(--lightsilver);
+}
+
+
+.reveal h2.subtitle {
+  color: var(--corange);
+}
+
+.reveal h3.subtitle {
+    color: var(--corange);
+}
+.reveal h4.subtitle {
+    color: var(--corange);
+}
+
+/* Titles */
+.reveal .title {
+  color: var(--lightsilver);
+}
+.reveal .subtitle {
+  color: var(--corange);
+}
+.reveal .author,
+.reveal .date {
+  color: var(--lightsilver);
+}
+
+/* Lists and items */
+.reveal ul li {
+  color: var(--lightsilver);
+}
+.reveal ul li::marker {
+  color: var(--corange);
+}
+
+/* Blocks */
+.block {
+  background: rgba(235, 237, 240, 0.1);
+  border-left: 4px solid var(--corange);
+  padding: 1em;
+  margin: 1em 0;
+}
+.alertblock {
+  background: rgba(243, 111, 32, 0.15);
+  border-left: 4px solid var(--corange);
+  padding: 1em;
+}
+.exampleblock {
+  background: rgba(235, 237, 240, 0.2);
+  border-left: 4px solid var(--lightsilver);
+  padding: 1em;
+}
+
+/* Frametitling style (imitates Beamer bar) */
+.reveal .slide-header {
+  background-color: var(--backblue);
+  color: var(--lightsilver);
+  text-align: center;
+  padding: 0.3em;
+  border-bottom: 2px solid var(--corange);
+}
+
+/* Footline (if you use a footer plugin) */
+.reveal .slide-footer {
+  background-color: var(--backblue);
+  color: var(--lightsilver);
+  text-align: center;
+  padding: 0.3em;
+  border-top: 2px solid var(--corange);
+}
+
+/* Center this block vertically like normal Reveal slides */
+.reveal .vipr-centered {
+    display: flex;
+    align-items: center;   /* vertical centering */
+    justify-content: center; /* horizontal centering */
+    flex-direction: column;
+    height: 400px;          /* let it fill the slide */
+  }
+
+/* Let sections use the full slide height for our calc() to work */
+/*.reveal section { height: 100%; }
+
+/* Scrollable viewport for tall images */
+.reveal section .vipr-scroll {
+  /* leave room for a heading; tweak 3.2em to match your h2 size */
+  height: 100%;
+  width: 80%;
+  overflow: auto;
+  margin: 0 auto;
+
+  border: 2px solid rgba(255,255,255,.2);
+  border-radius: 12px;
+  padding: .5rem;
+
+}
+
+/* Make the image fill width but keep aspect ratio */
+.reveal section .vipr-scroll img {
+  display: block;
+  width: 100%;
+  height: auto;     /* preserves aspect ratio */
+  max-width: none;  /* IMPORTANT: override Reveal’s defaults */
+}
+
+/* Override Reveal’s global img max-height shrink */
+.reveal img {
+  max-height: none !important;
+}
