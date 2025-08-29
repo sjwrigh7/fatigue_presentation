@@ -21,7 +21,7 @@
 				<!-- Title slide -->
 				 <section>
 				 <h1 class="title">
-				 	Progress Report
+			    Weekly Update	
 				 </h1>
 				 <h2 class="subtitle">
 					FA 3.22.8 Efficient Modeling and Guiding of Experimental Investigations for Pistons
@@ -33,18 +33,165 @@
 
 				<!-- Overview Slide -->
 				 <section>
+          <section>
+            <h2>Recent Work</h2>
+            <h4 class="subtitle">CRITICAL Updates</h4>
+            <ul>
+              <li>I swapped linux distributions on my laptop</li>
+              <ul>
+                <li>HUGE deal</li>
+                <li>Old busted joint: Ubuntu (gnome 3 desktop environment and mutter window manager) :/ boring</li>
+                <li>New hotness: Garuda linux with hyprland tiling window manager :D very cool</li>
+              </ul>
+            </ul>
+          </section>
+          <section data-auto-animate>
+            <h2>Recent Work</h2>
+            <h4 class="subtitle">CRUCIAL Updates</h4>
+            <div class="block">
+              I switched from LaTeX beamer presentations to reveal.js
+            </div>
+            <p data-id="line1">It's pretty cool</p>
+          </section>
+          <section data-auto-animate>
+            <p data-id="line1" style="color: var(--corange); font-size: 80pt;">It's pretty cool</p>
+          </section>
+        </section>
+        <section>
 					<section data-auto-animate>
-						<h2>Overview</h2>
-						<h4 class="subtitle">Review of Sensor Selection Methodology and Journal Paper</h4>
+						<h2>Recent Work</h2>
+						<h4 class="subtitle">VIPR Project 3.22.8</h4>
 						<ul>
-							<li>Motivation Recap</li>
-							<li>Methodology Description</li>
-							<li>Application to 2D DD13 FE model</li>
-							<li>Optimization Results</li>
-							<li>Algorithm Validation Procedure and Results</li>
+							<li>Writing key results section for semi-annual report</li>
+							<li>Developing progress report for 3.22.8 GVSC affiliates</li>
+              <ul>
+                <li>Primary focus on recapping sensor selection journal paper</li>
+                <li>Plans to discuss goals of future fatigue work</li>
+              </ul>
+						</ul>
+					</section>
+					<section data-auto-animate>
+						<h2>Recent Work</h2>
+						<h4 class="subtitle">VIPR Project 3.4</h4>
+						<ul>
+              <li>Discussion of motor power issues and resolution strategy with team</li>
+              <li>Troubleshooting issues with simulink model on palmetto cluster</li>
 						</ul>
 					</section>
 				 </section>
+        <!-- Issues -->
+        <section>
+          <section>
+           <h2>Issues</h2>
+           <h4 class="subtitle">Simulink problems on palmetto cluster</h4>
+           <div class="block">SIGNIFICATLY different torque responses from model when run locally compared to palmetto cluster</div>
+          </section>
+
+          <section>
+           <h2>Issues</h2>
+           <h4 class="subtitle">Plots</h4>
+            <div class="figcols">
+              <figure>
+                <img src="assets/figures/local_torque.png" style="width: 100%;">
+                <figcaption>Local torque response</figcaption>
+              </figure>
+              <figure>
+                <img src="assets/figures/palmetto_torque.png" style="width: 100%;">
+                <figcaption>Palmetto torque response</figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <section>
+           <h2>Issues</h2>
+           <h4 class="subtitle">Sanity checks</h4>
+           <ul>
+             <li>All necessary data files, model files, and scripts are stored in a git repo</li>
+              <li>The the git repo is cloned to the palmetto cluster so all files and directory structure should be identical</li>
+           </ul>
+          </section>
+
+          <section>
+           <h2>Issues</h2>
+           <h4 class="subtitle">Sanity checks</h4>
+           <ul>
+             <li>I have tested this at the original time step and edited time script and this doesn't resolve the issue</li>
+              
+             <li>The same exact matlab script is used to run the model (without editing any parameters)</li>
+           </ul>
+          </section>
+          <section>
+           <h2>Issues</h2>
+           <h4 class="subtitle">Sanity checks</h4>
+           <ul>
+              <li>I have made sure the correct scipt is being run (the previous script used to run the model edited the parameters based on the genetic algorithm population)</li>
+              <li>I have made sure to delete the old results files before running this to make sure it isn't a write issue</li>
+           </ul>
+          </section>
+
+          <section>
+           <h2>Issues</h2>
+           <h4 class="subtitle">Possible Cause: Pathing</h4>
+           <ul>
+             <li>Matlab does give a warning about potential pathing issues when I run the simulink model</li>
+              <ul>
+                <li>The base-line model is saved in a branch of a parent directory</li>
+                <li>The base-line model is copied into a new directory to be run</li>
+                <li>Highly unlikely source of the problem because the file structure is the same locally and the error doesn't occur there</li>
+
+              </ul>
+           </ul>
+          </section>
+          <section>
+           <h2>Issues</h2>
+           <h4 class="subtitle">Possible Cause: Pathing</h4>
+           <p>Example of directory setup</p>
+           <pre><code>
+            Git repo
+            ├── README.md
+            ├── simulink_models
+            │   ├── base_accel_model.slx
+            ├── source
+            │   ├── calibration
+            │   │   └── genetic_algorithm
+            │   │       ├── run_simulation.m
+            │   │       ├── simulations
+            │   │       │   └── accel
+            │   │       │       └── 1
+            │   │       │           └── copy_of_accel_model.slx
+           </code></pre>
+          </section>
+          <section>
+            <h2>Issues</h2>
+            <h4 class="subtitle">Possuible Cause: Matlab Version</h4>
+          <ul>
+              <li>Simulink model was made in version 2024b</li>
+              <li>Palmetto has 2022, 2023, and 2025 versions</li>
+              <li>Model is not backwards compatible</li>
+           </ul>
+          </section>
+          <section>
+            <h2>Issues</h2>
+            <h4 class="subtitle">Possible Cause: Dependency Issue</h4>
+          <ul>
+              <li>Model relies on a specific add-on block</li>
+              <li>This might not be available on palmetto</li>
+              <li>The model doesn't give any errors, which I would expect if the dependency is missing</li>
+           </ul>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h2>Path Forward</h2>
+            <ul>
+              <li>IT ticket filed yesterday</li>
+              <li>Palmetto office hours meeting on Tuesday</li>
+              <li>Download and test matlab 2025a locally this weekend</li>
+            </ul>
+          </section>
+        </section>
+
+
 			</div>
 		</div>
 
