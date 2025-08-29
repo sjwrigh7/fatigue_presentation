@@ -1,7 +1,7 @@
 /* VIPR reveal.js theme */
 
 /* Import a clean sans font */
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;700&display=swap');
+@import url(./dist/theme/fonts/source-sans-pro/source-sans-pro.css);
 
 :root {
   --backblue: #394957;
@@ -14,6 +14,42 @@
   font-family: 'Roboto', sans-serif;
   background-color: var(--backblue);
   color: var(--lightsilver);
+}
+
+/* Figures and Captions */
+.reveal .slides{
+    counter-reset: fig;
+}
+
+.reveal .figcols {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+    margin-top: 0em;
+}
+
+.reveal .slides figure {
+    counter-increment: fig;
+    display: inline-block;
+    margin: 1em auto;
+    text-align: center;
+    font-size: 0.65em;
+    margin-top: 0em;
+}
+
+
+.reveal figcaption::before {
+    content: "Figure " counter(fig) ": ";
+    color: var(--lightsilver);
+    text-align: center;
+    font-style: italic;
+    font-weight: bold;
+    margin-top: 0.4em;
+}
+.reveal figcaption{
+    color: var(--lightsilver);
+    text-align: center;
+    font-style: italic;
 }
 
 /* Headings */
@@ -55,6 +91,12 @@
   color: var(--lightsilver);
 }
 .reveal ul li::marker {
+  color: var(--corange);
+}
+.reveal ol li {
+  color: var(--lightsilver);
+}
+.reveal ol li::marker {
   color: var(--corange);
 }
 
@@ -101,6 +143,7 @@
     justify-content: center; /* horizontal centering */
     flex-direction: column;
     height: 400px;          /* let it fill the slide */
+    margin-bottom: 0.5em;
   }
 
 /* Let sections use the full slide height for our calc() to work */

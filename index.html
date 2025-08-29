@@ -9,7 +9,7 @@
 		<link rel="stylesheet" href="dist/reset.css">
 		<link rel="stylesheet" href="dist/reveal.css">
 		<link rel="stylesheet" href="dist/theme/black.css">
-		<link rel="stylesheet" href="vipr.css"
+		<link rel="stylesheet" href="vipr.css">
 
 		<!-- Theme used for syntax highlighted code -->
 		<link rel="stylesheet" href="plugin/highlight/monokai.css">
@@ -206,20 +206,30 @@
 					</section>
 					<section data-auto-animate>
 						<h2>Sensor Optimization Methodology</h2>
-						<h4 class="subtitle">Second stage optimization</h4>
+						<h4 class="subtitle">Second stage evaluation region definition</h4>
 						<ul>
-							<li>Define a region bounding the array of approximate optimums</li>
-							<li>Direct evaluation of Fisher information at all parameter settings inside region</li>
-							<li>Find best worst-case scenario</li>
+							<li>Solve for minimum and maximum values of $x$ and $y$ from coordinates in solution popluations</li>
+							<li>Define template region as Cartesian product $R= [x_{\textrm{min}},x_{\textrm{max}}] \times [y_{\textrm{min}},y_{\textrm{max}}]$</li>
+							<li>Map this to the discrete set of all FE nodes within the region</li>
 						</ul>
 					</section>
+					<section data-auto-animate>
+						<h2>Sensor Optimization Methodology</h2>
+						<h4 class="subtitle">Second stage optimization</h4>
+						<ol>
+							<li>Evaluate bounding region via array of approximate optimums</li>
+							<li>Direct evaluation of Fisher information at all parameter settings inside region</li>
+							<li>Find best worst-case scenario (minimax optimization)</li>
+						</ol>
+					</section>
+					
 				 </section>
 				 
 				 <!-- Application to 2D DD13 Model -->
 				 <section>
 					<section data-auto-animate>
 						<h2>Application to 2D DD13 Model</h2>
-						<h4 class="Model Overview"></h4>
+						<h4 class="subtitle">Model Overview</h4>
 						<ul>
 							<li>2D slice of 3D piston CAD</li>
 							<li>0.7 mm element size at crown</li>
@@ -228,7 +238,7 @@
 					</section>
 					<section data-auto-animate>
 						<h2>Application to 2D DD13 Model</h2>
-						<h4 class="Model Overview"></h4>
+						<h4 class="subtitle">Model Overview</h4>
 						<ul>
 							<li>Crown boundary condition mapped from CFD simulation</li>
 							<li>Backside boundary conditions are calibration parameters</li>
@@ -236,37 +246,131 @@
 					</section>
 					<section data-auto-animate>
 						<h2>Application to 2D DD13 Model</h2>
-						<h4 class="Model Overview"></h4>
-						<img data-src="assets/figures/Figure-0.png" style="width: 75%">
+						<h4 class="subtitle">Model boundary conditions</h4>
+						<figure>
+							<img src="assets/figures/main2.png" style="width: 75%">
+							<figcaption>Boundary Conditions in 2D FEM.</figcaption>
+						</figure>
 					</section>
 					<section data-auto-animate>
 						<h2>Application to 2D DD13 Model</h2>
-						<h4 class="subtitle">Initialization</h4>
+						<h4 class="subtitle">Model boundary conditions grouping</h4>
 						<ul>
-							<li>Generate LHC design of 25 parameter configurations</li>
-							<li>Solve FE model for each setting</li>
-							<li>These solutions generate the synthetic data</li>
+							<li>The one-at-a-time optimization approach maps sensors to unknown parameters 1:1</li>
+							<li>Boundary conditions were grouped so that the total number of unknown BCs is the same as the number of sensors available (8 dedicated to the backside)</li>
+						</ul>
+					</section>
+					<section data-auto-animate>
+						<h2>Application to 2D DD13 Model</h2>
+						<h4 class="subtitle">Model boundary conditions grouping</h4>
+						<ul>
+							<li>"Gallery, curve" and "Gallery, inner wall" were grouped</li>
+							<li>"Gallery, bottom" and "Gallery, outer wall" were grouped</li>
+							<li>"Groove 1", "Land 2", and "Groove 2" were grouped</li>
+							<li>"Land 3", "Groove 3", and "Land 4" were grouped</li>
 						</ul>
 					</section>
 					<section data-auto-animate>
 						<h2>Application to 2D DD13 Model</h2>
 						<div class="block">
-							Solve the two-stage optimization as described before
+							Solve the two-stage optimization procedure for each sensor
 						</div>
 					</section>
 				 </section>
+				<!-- Optimization walkthrough -->
+				<section>
+					<h1>Example of two-stage optimization for a single sensor</h1>
+				</section>
+				<section>
+					<section data-auto-animate>
+						<h2>Two-stage optimization example</h2>
+						<h4 class="subtitle">Introduction</h4>
+						<ul>
+							<li>Consider we are trying to optimize a sensor to the top segment of the cooling gallery</li>
+							<li>We will refer to this as $\theta_1$</li>
+							<li>There are 7 other $\theta$s in our model: $\boldsymbol{\theta}=(\theta_1,\ldots,\theta_8)$</li>
+						</ul>
+					</section>
+					<section data-auto-animate>
+						<h2>Two-stage optimization example</h2>
+						<h4 class="subtitle">Initialization</h4>
+						<ul>
+							<li>We generate a 25x8 Latin hypercube design</li>
+							<li>25 configurations of our 8 $\theta$, we denote this as $\boldsymbol{\Theta}^*$</li>
+							<li>We consider each of these 25 configurations a different possibility of the "true" values of our unknown BCs</li>
+							<ul>
+								<li>Both for the BC of interest, $\theta_1$, and the other BCs that are held fixed</li>
+							</ul>
+						</ul>
+					</section>
+					<section data-auto-animate>
+						<h2>Two-stage optimization example</h2>
+						<h4 class="subtitle">Data synthesis</h4>
+						<ul>
+							<li>We solve the FE model at each configuration</li>
+							<li>Draw 200 samples of Gaussian noise and add this to the FE model results</li>
+							<li>This gives us synthetic temperature data at each of the 25 configurations of "truth"</li>
+						</ul>
+					</section>
+					<section data-auto-animate>
+						<h2>Two-stage optimization example</h2>
+						<h4 class="subtitle">Surrogate Models</h4>
+						<ul>
+							<li>For each configuration of "truth" in $\boldsymbol{\Theta}^*$ we evaluate a grid of values for $\theta_1$</li>
+							<li>This gives us data to train a surrogate model for temperature as a function of $\theta_1$ at each of our configurations of "truth"</li>
+						</ul>
+					</section>
+					<section data-auto-animate>
+						<h2>Two-stage optimization example</h2>
+						<h4 class="subtitle">First stage genetic algorithm</h4>
+						<ul>
+							<li>We run the genetic algorithm to maximize Fisher information for each of the configurations in $\boldsymbol{\Theta}^*$</li>
+							<li>This gives us populations of approximate solutions for the best sensor location to calibrate 
+								the top segment of the cooling gallery</li>
+							<li>Each population is a set of approximate optimums based on the values of each $\theta$ from the Latin hypercube</li>
+						</ul>
+					</section>
+					<section data-auto-animate>
+						<h2>Two-stage optimization example</h2>
+						<h4 class="subtitle">Second stage robust optimization</h4>
+						<ul>
+							<li>We calculate the boundary around all of the solution populations via $R=[x_{\textrm{min}},x_{\textrm{max}}] \times [y_{\textrm{min}},y_{\textrm{max}}]$</li>
+							<li>We map this to the FE mesh to find all nodes inside the boundary, $R'$</li>
+							<li>We calcualte the Fisher information for each location in $R'$ using the synthetic data for every configuration in $\boldsymbol{\theta}^*$</li>
+						</ul>
+					</section>
+					<section data-auto-animate>
+						<h2>Two-stage optimization example</h2>
+						<h4 class="subtitle">Second stage robust optimization</h4>
+						<ul>
+							<li>For each location in $R'$, we find the minimum Fisher information, minimized over the different configurations of $\boldsymbol{\Theta}^*$, 
+								denoted as $\mathcal{I}_{\textrm{min}}$</li>
+							<li>We find the location that has the greatest $\mathcal{I}_{\textrm{min}}$</li>
+							<li>This location is the "safest" choice for placing a sensor</li>
+						</ul>
+					</section>
+				</section>
 				 <!-- Results -->
 				 <section>
 					<section data-auto-animate>
 						<h2>Results</h2>
-						<div style="display: flex; gap: 1em;">
-							<img src="assets/figures/Figure-3.png" data-id="img1" style="height: 45%;">
-							<img src="assets/figures/Figure-4.png" data-id="img1" style="height: 45%;">
+						<div class="figcols">
+							<figure>
+								<img src="assets/figures/CG1_populations.png" data-id="img1" style="width: 100%;">
+								<figcaption>Starting (top) and solution (bottom) populations for the sensor optimized to the 'Gallery, top' BC.</figcaption>
+							</figure>
+							<figure>
+								<img src="assets/figures/CG1_min-fisher.png" data-id="img1" style="width: 100%;">
+								<figcaption>Minimax Fisher information w.r.t. "Gallery, top" BC in it's solution region.</figcaption>
+							</figure>
 						</div>
 					</section>
 					<section data-auto-animate>
 						<h2>Results</h2>
-						<img src="assets/figures/Figure-5.png" style="height: 45%">
+						<figure>
+							<img src="assets/figures/main_fisher_r.png" style="width: 52%">
+							<figcaption>Normalized sum of minimax Fisher information for all BCs.</figcaption>
+						</figure>
 					</section>
 				 </section>
 				 <!-- Validation -->
@@ -312,11 +416,17 @@
 					<section data-auto-animate>
 						<h2>Methodology Validation</h2>
 						<h4 class="subtitle">Validation Results</h4>
-						<div class="vipr-centered">
-							<div class="vipr-scroll">
-								<img src="assets/figures/Figure-6.png" alt="Large figure">
+						<p style="font-size: 14pt;">Red lines indicate the log-ratio threshold for improvement with algorithm proposed nodes.
+							Blue lines inidace the average log-ratio for the given $\theta$
+						</p>
+						<figure>
+							<div class="vipr-centered">
+								<div class="vipr-scroll">
+									<img src="assets/figures/full_theta_results.png" alt="Large figure">
+								</div>
 							</div>
-						</div>
+							<figcaption>Validation MSE and variance for all unknown parameters.</figcaption>
+						</figure>
 					</section>
 					<section data-auto-animate>
 						<h2>Methodology Validation</h2>
@@ -378,7 +488,7 @@
 			// - https://revealjs.com/config/
 			Reveal.initialize({
 				hash: true,
-
+				slideNumber: true,
 				// Learn about plugins: https://revealjs.com/plugins/
 				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX, RevealMenu ]
 			});
