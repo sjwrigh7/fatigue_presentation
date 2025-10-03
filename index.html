@@ -27,171 +27,370 @@
 					FA 3.22.8 Efficient Modeling and Guiding of Experimental Investigations for Pistons
 				 </h2>
 				 <p class="author">Stephen Wright</p>
-				 <p class="date">August 2025</p>
+				 <p class="date">October 3, 2025</p>
 				 <p>DRAFT</p>
 				 </section>
 
 				<!-- Overview Slide -->
-				 <section>
-          <section>
-            <h2>Recent Work</h2>
-            <h4 class="subtitle">CRITICAL Updates</h4>
-            <ul>
-              <li>I swapped linux distributions on my laptop</li>
-              <ul>
-                <li>HUGE deal</li>
-                <li>Old busted joint: Ubuntu (gnome 3 desktop environment and mutter window manager) :/ boring</li>
-                <li>New hotness: Garuda linux with hyprland tiling window manager :D very cool</li>
-              </ul>
-            </ul>
-          </section>
-          <section data-auto-animate>
-            <h2>Recent Work</h2>
-            <h4 class="subtitle">CRUCIAL Updates</h4>
-            <div class="block">
-              I switched from LaTeX beamer presentations to reveal.js
-            </div>
-            <p data-id="line1">It's pretty cool</p>
-          </section>
-          <section data-auto-animate>
-            <p data-id="line1" style="color: var(--corange); font-size: 80pt;">It's pretty cool</p>
-          </section>
+				<section>
+          <h2>Recent Work</h2>
+          <ul>
+            <li>Investigation of physics errors in digital twin model</li>
+            <li>Rough first draft of future fatigue work proposal</li>
+            <li>Plan for fatigue paper</li>
+          </ul>
         </section>
         <section>
-					<section data-auto-animate>
-						<h2>Recent Work</h2>
-						<h4 class="subtitle">VIPR Project 3.22.8</h4>
-						<ul>
-							<li>Writing key results section for semi-annual report</li>
-							<li>Developing progress report for 3.22.8 GVSC affiliates</li>
-              <ul>
-                <li>Primary focus on recapping sensor selection journal paper</li>
-                <li>Plans to discuss goals of future fatigue work</li>
-              </ul>
-						</ul>
-					</section>
-					<section data-auto-animate>
-						<h2>Recent Work</h2>
-						<h4 class="subtitle">VIPR Project 3.4</h4>
-						<ul>
-              <li>Discussion of motor power issues and resolution strategy with team</li>
-              <li>Troubleshooting issues with simulink model on palmetto cluster</li>
-						</ul>
-					</section>
-				 </section>
-        <!-- Issues -->
-        <section>
-          <section>
-           <h2>Issues</h2>
-           <h4 class="subtitle">Simulink problems on palmetto cluster</h4>
-           <div class="block">SIGNIFICATLY different torque responses from model when run locally compared to palmetto cluster</div>
-          </section>
-
-          <section>
-           <h2>Issues</h2>
-           <h4 class="subtitle">Plots</h4>
-            <div class="figcols">
-              <figure>
-                <img src="assets/figures/local_torque.png" style="width: 100%;">
-                <figcaption>Local torque response</figcaption>
-              </figure>
-              <figure>
-                <img src="assets/figures/palmetto_torque.png" style="width: 100%;">
-                <figcaption>Palmetto torque response</figcaption>
-              </figure>
-            </div>
-          </section>
-
-          <section>
-           <h2>Issues</h2>
-           <h4 class="subtitle">Sanity checks</h4>
-           <ul>
-             <li>All necessary data files, model files, and scripts are stored in a git repo</li>
-              <li>The the git repo is cloned to the palmetto cluster so all files and directory structure should be identical</li>
-           </ul>
-          </section>
-
-          <section>
-           <h2>Issues</h2>
-           <h4 class="subtitle">Sanity checks</h4>
-           <ul>
-             <li>I have tested this at the original time step and edited time script and this doesn't resolve the issue</li>
-              
-             <li>The same exact matlab script is used to run the model (without editing any parameters)</li>
-           </ul>
-          </section>
-          <section>
-           <h2>Issues</h2>
-           <h4 class="subtitle">Sanity checks</h4>
-           <ul>
-              <li>I have made sure the correct scipt is being run (the previous script used to run the model edited the parameters based on the genetic algorithm population)</li>
-              <li>I have made sure to delete the old results files before running this to make sure it isn't a write issue</li>
-           </ul>
-          </section>
-
-          <section>
-           <h2>Issues</h2>
-           <h4 class="subtitle">Possible Cause: Pathing</h4>
-           <ul>
-             <li>Matlab does give a warning about potential pathing issues when I run the simulink model</li>
-              <ul>
-                <li>The base-line model is saved in a branch of a parent directory</li>
-                <li>The base-line model is copied into a new directory to be run</li>
-                <li>Highly unlikely source of the problem because the file structure is the same locally and the error doesn't occur there</li>
-
-              </ul>
-           </ul>
-          </section>
-          <section>
-           <h2>Issues</h2>
-           <h4 class="subtitle">Possible Cause: Pathing</h4>
-           <p>Example of directory setup</p>
-           <pre><code>
-            Git repo
-            ├── README.md
-            ├── simulink_models
-            │   ├── base_accel_model.slx
-            ├── source
-            │   ├── calibration
-            │   │   └── genetic_algorithm
-            │   │       ├── run_simulation.m
-            │   │       ├── simulations
-            │   │       │   └── accel
-            │   │       │       └── 1
-            │   │       │           └── copy_of_accel_model.slx
-           </code></pre>
-          </section>
-          <section>
-            <h2>Issues</h2>
-            <h4 class="subtitle">Possuible Cause: Matlab Version</h4>
-          <ul>
-              <li>Simulink model was made in version 2024b</li>
-              <li>Palmetto has 2022, 2023, and 2025 versions</li>
-              <li>Model is not backwards compatible</li>
-           </ul>
-          </section>
-          <section>
-            <h2>Issues</h2>
-            <h4 class="subtitle">Possible Cause: Dependency Issue</h4>
-          <ul>
-              <li>Model relies on a specific add-on block</li>
-              <li>This might not be available on palmetto</li>
-              <li>The model doesn't give any errors, which I would expect if the dependency is missing</li>
-           </ul>
-          </section>
+          <h1>Digital twin physics errors</h1>
         </section>
         <section>
           <section>
-            <h2>Path Forward</h2>
+              <h2>Last week's discussion with Tanmay</h2>
+              <ul>
+                <li>RHR coordinate system</li>
+                <ul>
+                  <li>positive $x$ is forward</li>
+                  <li>positive $y$ is left</li>
+                  <li>positive $z$ is up</li>
+                </ul>
+                <li>When the vehicle accelerates, pitch should be negative</li>
+                <li>$M_y$ should use negative terms for upward force applied in front of CG</li>
+              </ul>
+          </section>
+          <section>
+            <h2>Problems</h2>
             <ul>
-              <li>IT ticket filed yesterday</li>
-              <li>Palmetto office hours meeting on Tuesday</li>
-              <li>Download and test matlab 2025a locally this weekend</li>
+              <li>Applying this change to the model results in numerical issues in the model</li>
+              <li>Genetic algorithm solutions ran to infinity (NaN)</li>
             </ul>
           </section>
         </section>
 
+        <section>
+          <section>
+            <h2>Responses after change</h2>
+            <figure>
+							<img src="assets/figures/moment_sign/absolute_angles.png" style="width: 75%">
+							<figcaption>Absolute suspension arm angles, experiment and model.</figcaption>
+						</figure>
+          </section>
 
+          <section>
+            <figure>
+							<img src="assets/figures/moment_sign/relative_angles.png" style="width: 75%">
+							<figcaption>Relative suspension arm angles, model.</figcaption>
+						</figure>
+          </section>
+
+          <section>
+            <figure>
+							<img src="assets/figures/moment_sign/pitch.png" style="width: 75%">
+							<figcaption>Pitch, experiment and model.</figcaption>
+						</figure>
+          </section>
+
+          <section>
+            <figure>
+							<img src="assets/figures/moment_sign/z_coords.png" style="width: 75%">
+							<figcaption>$Z$ coordinates of suspension arm joints, model.</figcaption>
+						</figure>
+          </section>
+          
+          <section>
+            <figure>
+							<img src="assets/figures/moment_sign/z_force.png" style="width: 75%">
+							<figcaption>$Z$ forces at suspension arm joints.</figcaption>
+						</figure>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Responses before change</h2>
+            <figure>
+							<img src="assets/figures/original/absolute_angles.png" style="width: 75%">
+							<figcaption>Absolute suspension arm angles, experiment and model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/original/relative_angles.png" style="width: 75%">
+							<figcaption>Relative suspension arm angles, model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/original/pitch.png" style="width: 75%">
+							<figcaption>Pitch, experiment and model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/original/z_coords.png" style="width: 75%">
+							<figcaption>$Z$ coordinates of suspension arm joints, model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/original/z_force.png" style="width: 75%">
+							<figcaption>$Z$ forces at suspension arm joints.</figcaption>
+						</figure>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Observed problems</h2>
+            <ul>
+              <li>Changes in suspension arm location during acceleration are opposite what we would expect</li>
+              <ul>
+                <li>It turns out the location calculations are done using the negative of the pitch</li>
+              </ul>
+            </ul>
+          </section>
+          <section>
+            <h2>Observed Problems</h2>
+            <ul>
+              <li>Relative angles are positive after gravity settling</li>
+              <ul>
+                <li>Given these angles are measured from the horizontal axis, this doesn't make sense</li>
+                <li>As the vehicle settles downward from gravity, the angles should decrease</li>
+                <li>It turns out the relative angles (used for force calculations) are the negative of what they would physically be</li>
+              </ul>
+          </ul>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Changing pitch sign</h2>
+            <figure>
+							<img src="assets/figures/nonneg_pitch/absolute_angles.png" style="width: 75%">
+							<figcaption>Absolute suspension arm angles, experiment and model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/nonneg_pitch/relative_angles.png" style="width: 75%">
+							<figcaption>Relative suspension arm angles, model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/nonneg_pitch/pitch.png" style="width: 75%">
+							<figcaption>Pitch, experiment and model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/nonneg_pitch/z_coords.png" style="width: 75%">
+							<figcaption>$Z$ coordinates of suspension arm joints, model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/nonneg_pitch/z_force.png" style="width: 75%">
+							<figcaption>$Z$ forces at suspension arm joints.</figcaption>
+						</figure>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h3>Changing relative angle sign</h3>
+            <figure>
+							<img src="assets/figures/opposite_relative_angles/absolute_angles.png" style="width: 75%">
+							<figcaption>Absolute suspension arm angles, experiment and model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/opposite_relative_angles/relative_angles.png" style="width: 75%">
+							<figcaption>Relative suspension arm angles, model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/opposite_relative_angles/pitch.png" style="width: 75%">
+							<figcaption>Pitch, experiment and model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/opposite_relative_angles/z_coords.png" style="width: 75%">
+							<figcaption>$Z$ coordinates of suspension arm joints, model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/opposite_relative_angles/z_force.png" style="width: 75%">
+							<figcaption>$Z$ forces at suspension arm joints.</figcaption>
+						</figure>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h4>Changing relative angle sign and moment force sign</h4>
+            <figure>
+							<img src="assets/figures/moment_sign_and_relative_angles/absolute_angles.png" style="width: 75%">
+							<figcaption>Absolute suspension arm angles, experiment and model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/moment_sign_and_relative_angles/relative_angles.png" style="width: 75%">
+							<figcaption>Relative suspension arm angles, model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/moment_sign_and_relative_angles/pitch.png" style="width: 75%">
+							<figcaption>Pitch, experiment and model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/moment_sign_and_relative_angles/z_coords.png" style="width: 75%">
+							<figcaption>$Z$ coordinates of suspension arm joints, model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/moment_sign_and_relative_angles/z_force.png" style="width: 75%">
+							<figcaption>$Z$ forces at suspension arm joints.</figcaption>
+						</figure>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h3>Changing all three components</h3>
+            <figure>
+							<img src="assets/figures/all_changes/absolute_angles.png" style="width: 75%">
+							<figcaption>Absolute suspension arm angles, experiment and model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/all_changes/relative_angles.png" style="width: 75%">
+							<figcaption>Relative suspension arm angles, model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/all_changes/pitch.png" style="width: 75%">
+							<figcaption>Pitch, experiment and model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/all_changes/z_coords.png" style="width: 75%">
+							<figcaption>$Z$ coordinates of suspension arm joints, model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/all_changes/z_force.png" style="width: 75%">
+							<figcaption>$Z$ forces at suspension arm joints.</figcaption>
+						</figure>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h4>Changing pitch sign and moment force sign</h4>
+            <figure>
+							<img src="assets/figures/pitch_and_moment/absolute_angles.png" style="width: 75%">
+							<figcaption>Absolute suspension arm angles, experiment and model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/pitch_and_moment/relative_angles.png" style="width: 75%">
+							<figcaption>Relative suspension arm angles, model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/pitch_and_moment/pitch.png" style="width: 75%">
+							<figcaption>Pitch, experiment and model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/pitch_and_moment/z_coords.png" style="width: 75%">
+							<figcaption>$Z$ coordinates of suspension arm joints, model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/pitch_and_moment/z_force.png" style="width: 75%">
+							<figcaption>$Z$ forces at suspension arm joints.</figcaption>
+						</figure>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h4>Changing pitch sign and relative angle sign</h4>
+            <figure>
+							<img src="assets/figures/pitch_and_relative_angles/absolute_angles.png" style="width: 75%">
+							<figcaption>Absolute suspension arm angles, experiment and model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/pitch_and_relative_angles/relative_angles.png" style="width: 75%">
+							<figcaption>Relative suspension arm angles, model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/pitch_and_relative_angles/pitch.png" style="width: 75%">
+							<figcaption>Pitch, experiment and model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/pitch_and_relative_angles/z_coords.png" style="width: 75%">
+							<figcaption>$Z$ coordinates of suspension arm joints, model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/pitch_and_relative_angles/z_force.png" style="width: 75%">
+							<figcaption>$Z$ forces at suspension arm joints.</figcaption>
+						</figure>
+          </section>
+        </section>
+        
+        <section>
+          <section>
+            <h2>Fatigue work proposal</h2>
+            <ul>
+              <li>Initial rough draft of proposal for future fatigue work</li>
+              <li>Literature review</li>
+              <ul>
+                <li>fatigue life models</li>
+                <li>microstructure models</li>
+                <li>weld process modeling</li>
+              </ul>
+              <li>Functional decomposition of problem</li>
+              <ul>
+                <li>Breaking down large problem into isolated subproblems that can be combined at the end</li>
+              </ul>
+            </ul>
+          </section>
+          <section>
+            <h2>Proposed topic for fatigue paper</h2>
+            <ul>
+              <li>Optimization of fatigue experiments</li>
+              <li>Combination of Bayesian model calibration, Bayesian experiment design, and Bayesian optimizaiton</li>
+              <li>Gaussian process model to apply these techniques</li>
+            </ul>
+          </section>
+        </section>
 			</div>
 		</div>
 
