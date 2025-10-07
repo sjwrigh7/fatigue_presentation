@@ -27,7 +27,7 @@
 					FA 3.22.8 Efficient Modeling and Guiding of Experimental Investigations for Pistons
 				 </h2>
 				 <p class="author">Stephen Wright</p>
-				 <p class="date">October 3, 2025</p>
+				 <p class="date">October 7, 2025</p>
 				 <p>DRAFT</p>
 				 </section>
 
@@ -57,56 +57,12 @@
                 <li>$M_y$ should use negative terms for upward force applied in front of CG</li>
               </ul>
           </section>
-          <section>
-            <h2>Problems</h2>
-            <ul>
-              <li>Applying this change to the model results in numerical issues in the model</li>
-              <li>Genetic algorithm solutions ran to infinity (NaN)</li>
-            </ul>
-          </section>
+
         </section>
 
         <section>
           <section>
-            <h2>Responses after change</h2>
-            <figure>
-							<img src="assets/figures/moment_sign/absolute_angles.png" style="width: 75%">
-							<figcaption>Absolute suspension arm angles, experiment and model.</figcaption>
-						</figure>
-          </section>
-
-          <section>
-            <figure>
-							<img src="assets/figures/moment_sign/relative_angles.png" style="width: 75%">
-							<figcaption>Relative suspension arm angles, model.</figcaption>
-						</figure>
-          </section>
-
-          <section>
-            <figure>
-							<img src="assets/figures/moment_sign/pitch.png" style="width: 75%">
-							<figcaption>Pitch, experiment and model.</figcaption>
-						</figure>
-          </section>
-
-          <section>
-            <figure>
-							<img src="assets/figures/moment_sign/z_coords.png" style="width: 75%">
-							<figcaption>$Z$ coordinates of suspension arm joints, model.</figcaption>
-						</figure>
-          </section>
-          
-          <section>
-            <figure>
-							<img src="assets/figures/moment_sign/z_force.png" style="width: 75%">
-							<figcaption>$Z$ forces at suspension arm joints.</figcaption>
-						</figure>
-          </section>
-        </section>
-
-        <section>
-          <section>
-            <h2>Responses before change</h2>
+            <h2>Current digital twin</h2>
             <figure>
 							<img src="assets/figures/original/absolute_angles.png" style="width: 75%">
 							<figcaption>Absolute suspension arm angles, experiment and model.</figcaption>
@@ -148,22 +104,132 @@
               </ul>
             </ul>
           </section>
+
           <section>
-            <h2>Observed Problems</h2>
+            <h2>Suspension Calculations</h2>
             <ul>
-              <li>Relative angles are positive after gravity settling</li>
-              <ul>
-                <li>Given these angles are measured from the horizontal axis, this doesn't make sense</li>
-                <li>As the vehicle settles downward from gravity, the angles should decrease</li>
-                <li>It turns out the relative angles (used for force calculations) are the negative of what they would physically be</li>
-              </ul>
-          </ul>
+              <li>Pitch is the rotation about $y$</li>
+              <li>Given the RHR, rotating forward is positive, rotating backward is negative</li>
+              <li>$(x,z)$ coordinates of the suspension arm joints are calculated based on pitch</li>
+            </ul>
+          </section>
+          <section>
+            $$\mathbf{X}^{cg,0} = \begin{bmatrix}
+              0 & H_{cg} \\
+              0 & H_{cg} \\
+              \vdots & \vdots \\
+              0 & H_{cg}
+              \end{bmatrix}_{5,2}
+            $$
+
+          </section>
+          <section>
+            $$\mathbf{X}^0 = 1E\textrm{-}3\begin{bmatrix}
+              1044.73 &    455.369\\
+                      646.529 &    330.467\\
+                      228.9325 &   326.386\\
+                      -188.664 &  322.305\\
+                      -782.712 &  300\\
+              \end{bmatrix}
+              - 32 \times \mathbf{1}_{5,2}
+            $$
+          </section>
+          <section>
+            $$\mathbf{X}^* = \begin{bmatrix}
+              0 & z_{cg} \\
+              0 & z_{cg} \\
+              \vdots & \vdots \\
+              0 & z_{cg}
+              \end{bmatrix}_{10,2}
+            $$
+          </section>
+          <section>
+            $$\Delta_{\theta} \mathbf{X} = (\mathbf{X}^{0} - \mathbf{X}^{cg,0}) \times \begin{bmatrix}
+              \cos(-\theta) & -\sin(-\theta) \\
+              \sin(-\theta) & \cos(-\theta)
+            \end{bmatrix}$$
+          </section>
+          <section>
+            $$ \Delta_{\phi}  \mathbf{X} = \begin{bmatrix} 
+              0 & l_\textrm{tr} \sin(\phi) w_{\textrm{tr}}/2 \\
+              0 & l_\textrm{tr} \sin(\phi) w_{\textrm{tr}}/2 \\
+              \vdots & \vdots \\
+              0 & l_\textrm{tr} \sin(\phi) w_{\textrm{tr}}/2
+              \end{bmatrix}_{10,2}
+            $$
+          </section>
+          <section>
+            $$\mathbf{X}^{t+1} = \mathbf{X}^* + \Delta_{\theta} \mathbf{X} + \Delta_{\phi} \mathbf{X}$$
+            $$\mathbf{z}^{t+1} = [\mathbf{X}^{t+1}_{i,j}]; \space i = 1,\ldots,10, \space j = 2$$
+            $$\mathbf{z}^* = (\mathbf{z}^{t+1} - R_{\textrm{wheel}} \times \mathbf{1}_{10} - t_{\textrm{tr}}\times \mathbf{1}_{10})$$
+            $$\boldsymbol{\alpha}^* = [\sin^{-1}(\mathbf{z}^*_i / l_{\textrm{arm}})]; \space i = 1,\ldots,10$$
+          </section>
+          <section>
+            $$\boldsymbol{\alpha}'^{t+1} = \boldsymbol{\alpha}_0 + \phi$$
+            $$\boldsymbol{\alpha}^{t+1} = \min(\boldsymbol{\alpha}'^{t+1},\boldsymbol{\alpha}^*)$$
+            $$\Delta \boldsymbol{\alpha}^{t+1} = \boldsymbol{\alpha}^{t+1} - \boldsymbol{\alpha}'^{t+1}$$
+            $$\mathbf{v}_{\alpha} = (\boldsymbol{\alpha}^{t+1}-\boldsymbol{\alpha}^t)/dt$$
+            
+          </section>
+
+          <section>
+            <div class="alertblock">Positive pitch should be used!</div>
+            $$\Delta_{\theta} \mathbf{X} = (\mathbf{X}^{0} - \mathbf{X}^{cg,0}) \times \begin{bmatrix}
+              \cos(\theta) & -\sin(\theta) \\
+              \sin(\theta) & \cos(\theta)
+            \end{bmatrix}$$
           </section>
         </section>
 
         <section>
           <section>
-            <h2>Changing pitch sign</h2>
+            <h2>Moment calculations</h2>
+            <div class="alertblock">Moment calculations make no sense!</div>
+          </section>
+          <section>
+            <h2>Force diagram</h2>
+            <figure>
+              <img src="assets/figures/diagram.png" style="width: 75%">
+              <figcaption>Force diagram of vehicle</figcaption>
+            </figure>
+          </section>
+          <section>
+            <ul>
+              <li>Positive $F_1$ and $F_2$, applied at a positive $x$ distance from the CG, should result in a negative rotation about $y$</li>
+              <li>Positive $F_3$ and $F_4$, applied at a negative $x$ distance from the CG, should result in a positive rotation about $y$</li>
+              <li>Positive $F_x$ should result in a negative rotation about $y$</li>
+            </ul>
+          </section>
+          <section>
+            $$\mathbf{x}^{t+1} = [\mathbf{X}^{t+1}_{i,j}]; \space i = 1,\ldots,10, \space j = 1$$
+            $$\mathbf{x}_{F_z} = \mathbf{x}^{t+1} - l_{\textrm{arm}} \cos(\Delta\boldsymbol{\alpha}^{t+1})$$
+            $$\boldsymbol{\tau}_{\textrm{arm}} = k_{\tau} \Delta\boldsymbol{\alpha}^{t+1} + c_{\tau} \mathbf{v}_{\alpha}$$
+            $$\mathbf{F}_z = \boldsymbol{\tau}_{\textrm{arm}}/(l_{\textrm{arm}} \cos(\boldsymbol{\alpha}^{t+1}))$$
+            $$\mathbf{M}'_y = \mathbf{F}_z^+ \mathbf{x}_{F_z}$$
+            $$\Sigma M_y = \sum \mathbf{M}'_y - \mathbf{F}_x z_{cg}$$
+          </section>
+          <section>
+            <div class="alertblock">Code uses positive $ \mathbf{F}_z^+ \mathbf{x}_{F_z}$ and negative $\mathbf{F}_x z_{cg}$</div>
+            <div class="alertblock">Code uses $ \mathbf{F}_z^+$, not subtracting gravitational force</div>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Additional observation</h2>
+            <div class="alertblock">Wild net moment values during settling</div>
+          </section>
+          <section>
+            <figure>
+              <img src="assets/figures/net_moment.png" style="width: 100%">
+							<figcaption>$\Sigma M_y$</figcaption>
+            </figure>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Using proper pitch</h2>
             <figure>
 							<img src="assets/figures/nonneg_pitch/absolute_angles.png" style="width: 75%">
 							<figcaption>Absolute suspension arm angles, experiment and model.</figcaption>
@@ -197,33 +263,33 @@
 
         <section>
           <section>
-            <h3>Changing relative angle sign</h3>
+            <h2>Using correct moment sign</h2>
             <figure>
-							<img src="assets/figures/opposite_relative_angles/absolute_angles.png" style="width: 75%">
+							<img src="assets/figures/moment_sign/absolute_angles.png" style="width: 75%">
 							<figcaption>Absolute suspension arm angles, experiment and model.</figcaption>
 						</figure>
           </section>
           <section>
             <figure>
-							<img src="assets/figures/opposite_relative_angles/relative_angles.png" style="width: 75%">
+							<img src="assets/figures/moment_sign/relative_angles.png" style="width: 75%">
 							<figcaption>Relative suspension arm angles, model.</figcaption>
 						</figure>
           </section>
           <section>
             <figure>
-							<img src="assets/figures/opposite_relative_angles/pitch.png" style="width: 75%">
+							<img src="assets/figures/moment_sign/pitch.png" style="width: 75%">
 							<figcaption>Pitch, experiment and model.</figcaption>
 						</figure>
           </section>
           <section>
             <figure>
-							<img src="assets/figures/opposite_relative_angles/z_coords.png" style="width: 75%">
+							<img src="assets/figures/moment_sign/z_coords.png" style="width: 75%">
 							<figcaption>$Z$ coordinates of suspension arm joints, model.</figcaption>
 						</figure>
           </section>
           <section>
             <figure>
-							<img src="assets/figures/opposite_relative_angles/z_force.png" style="width: 75%">
+							<img src="assets/figures/moment_sign/z_force.png" style="width: 75%">
 							<figcaption>$Z$ forces at suspension arm joints.</figcaption>
 						</figure>
           </section>
@@ -231,75 +297,7 @@
 
         <section>
           <section>
-            <h4>Changing relative angle sign and moment force sign</h4>
-            <figure>
-							<img src="assets/figures/moment_sign_and_relative_angles/absolute_angles.png" style="width: 75%">
-							<figcaption>Absolute suspension arm angles, experiment and model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/moment_sign_and_relative_angles/relative_angles.png" style="width: 75%">
-							<figcaption>Relative suspension arm angles, model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/moment_sign_and_relative_angles/pitch.png" style="width: 75%">
-							<figcaption>Pitch, experiment and model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/moment_sign_and_relative_angles/z_coords.png" style="width: 75%">
-							<figcaption>$Z$ coordinates of suspension arm joints, model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/moment_sign_and_relative_angles/z_force.png" style="width: 75%">
-							<figcaption>$Z$ forces at suspension arm joints.</figcaption>
-						</figure>
-          </section>
-        </section>
-
-        <section>
-          <section>
-            <h3>Changing all three components</h3>
-            <figure>
-							<img src="assets/figures/all_changes/absolute_angles.png" style="width: 75%">
-							<figcaption>Absolute suspension arm angles, experiment and model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/all_changes/relative_angles.png" style="width: 75%">
-							<figcaption>Relative suspension arm angles, model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/all_changes/pitch.png" style="width: 75%">
-							<figcaption>Pitch, experiment and model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/all_changes/z_coords.png" style="width: 75%">
-							<figcaption>$Z$ coordinates of suspension arm joints, model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/all_changes/z_force.png" style="width: 75%">
-							<figcaption>$Z$ forces at suspension arm joints.</figcaption>
-						</figure>
-          </section>
-        </section>
-
-        <section>
-          <section>
-            <h4>Changing pitch sign and moment force sign</h4>
+            <h2>Fixing both</h2>
             <figure>
 							<img src="assets/figures/pitch_and_moment/absolute_angles.png" style="width: 75%">
 							<figcaption>Absolute suspension arm angles, experiment and model.</figcaption>
@@ -333,38 +331,152 @@
 
         <section>
           <section>
-            <h4>Changing pitch sign and relative angle sign</h4>
+            <h2>Tanmay's code</h2>
+            <ul>
+              <li>Tanmay also uses $-\theta$ for the transformation matrix in his code</li>
+              <li>He uses positive $ \mathbf{F}_z^+ \mathbf{x}_{F_z}$ and positive $\mathbf{F}_x z_{cg}$ for the moment calculation</li>
+            </ul>
+          </section>
+          <section>
             <figure>
-							<img src="assets/figures/pitch_and_relative_angles/absolute_angles.png" style="width: 75%">
+							<img src="assets/figures/pos_moment/absolute_angles.png" style="width: 75%">
 							<figcaption>Absolute suspension arm angles, experiment and model.</figcaption>
 						</figure>
           </section>
           <section>
             <figure>
-							<img src="assets/figures/pitch_and_relative_angles/relative_angles.png" style="width: 75%">
+							<img src="assets/figures/pos_moment/relative_angles.png" style="width: 75%">
 							<figcaption>Relative suspension arm angles, model.</figcaption>
 						</figure>
           </section>
           <section>
             <figure>
-							<img src="assets/figures/pitch_and_relative_angles/pitch.png" style="width: 75%">
+							<img src="assets/figures/pos_moment/pitch.png" style="width: 75%">
 							<figcaption>Pitch, experiment and model.</figcaption>
 						</figure>
           </section>
           <section>
             <figure>
-							<img src="assets/figures/pitch_and_relative_angles/z_coords.png" style="width: 75%">
+							<img src="assets/figures/pos_moment/z_coords.png" style="width: 75%">
 							<figcaption>$Z$ coordinates of suspension arm joints, model.</figcaption>
 						</figure>
           </section>
           <section>
             <figure>
-							<img src="assets/figures/pitch_and_relative_angles/z_force.png" style="width: 75%">
+							<img src="assets/figures/pos_moment/z_force.png" style="width: 75%">
 							<figcaption>$Z$ forces at suspension arm joints.</figcaption>
 						</figure>
           </section>
         </section>
-        
+
+        <section>
+          <section>
+            <h2>Using net forces</h2>
+            Currently, the code uses the total $F_z$ to calculate $M_y$
+            $$\boldsymbol{\tau}_{\textrm{arm}} = k_{\tau} \Delta\boldsymbol{\alpha}^{t+1} + c_{\tau} \mathbf{v}_{\alpha}$$
+            $$\mathbf{F}_z = \boldsymbol{\tau}_{\textrm{arm}}/(l_{\textrm{arm}} \cos(\boldsymbol{\alpha}^{t+1}))$$
+            I would think that the net force should be used.
+            $$\mathbf{F}_z = \boldsymbol{\tau}_{\textrm{arm}}/(l_{\textrm{arm}} \cos(\boldsymbol{\alpha}^{t+1})) - mg$$
+          </section>
+          <section>
+            <h4>Using net force with negative pitch and positive moment terms</h4>
+            <figure>
+							<img src="assets/figures/net_force/absolute_angles.png" style="width: 75%">
+							<figcaption>Absolute suspension arm angles, experiment and model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/net_force/relative_angles.png" style="width: 75%">
+							<figcaption>Relative suspension arm angles, model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/net_force/pitch.png" style="width: 75%">
+							<figcaption>Pitch, experiment and model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/net_force/z_coords.png" style="width: 75%">
+							<figcaption>$Z$ coordinates of suspension arm joints, model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/net_force/z_force.png" style="width: 75%">
+							<figcaption>$Z$ forces at suspension arm joints.</figcaption>
+						</figure>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h4>Using net force with positive pitch and positive moment terms</h4>
+            <figure>
+							<img src="assets/figures/net_force_positive_pitch/absolute_angles.png" style="width: 75%">
+							<figcaption>Absolute suspension arm angles, experiment and model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/net_force_positive_pitch/relative_angles.png" style="width: 75%">
+							<figcaption>Relative suspension arm angles, model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/net_force_positive_pitch/pitch.png" style="width: 75%">
+							<figcaption>Pitch, experiment and model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/net_force_positive_pitch/z_coords.png" style="width: 75%">
+							<figcaption>$Z$ coordinates of suspension arm joints, model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/net_force_positive_pitch/z_force.png" style="width: 75%">
+							<figcaption>$Z$ forces at suspension arm joints.</figcaption>
+						</figure>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h4>Using net force with positive pitch and negative moment terms</h4>
+            <figure>
+							<img src="assets/figures/net_force_positive_pitch_negative_moment/absolute_angles.png" style="width: 75%">
+							<figcaption>Absolute suspension arm angles, experiment and model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/net_force_positive_pitch_negative_moment/relative_angles.png" style="width: 75%">
+							<figcaption>Relative suspension arm angles, model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/net_force_positive_pitch_negative_moment/pitch.png" style="width: 75%">
+							<figcaption>Pitch, experiment and model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/net_force_positive_pitch_negative_moment/z_coords.png" style="width: 75%">
+							<figcaption>$Z$ coordinates of suspension arm joints, model.</figcaption>
+						</figure>
+          </section>
+          <section>
+            <figure>
+							<img src="assets/figures/net_force_positive_pitch_negative_moment/z_force.png" style="width: 75%">
+							<figcaption>$Z$ forces at suspension arm joints.</figcaption>
+						</figure>
+          </section>
+        </section>
+
         <section>
           <section>
             <h2>Fatigue work proposal</h2>
