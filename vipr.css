@@ -41,7 +41,7 @@
 
 
 .reveal .slides figcaption::before {
-    content: "Figure " counter(fig) ": ";
+    content: "Figure: ";
     color: var(--lightsilver);
     text-align: center;
     font-style: italic;

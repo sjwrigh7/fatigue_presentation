@@ -19,488 +19,765 @@
 			<div class="slides">
 
 				<!-- Title slide -->
-				 <section>
-				 <h1 class="title">
-			    Weekly Update	
-				 </h1>
-				 <h2 class="subtitle">
-					FA 3.22.8 Efficient Modeling and Guiding of Experimental Investigations for Pistons
-				 </h2>
-				 <p class="author">Stephen Wright</p>
-				 <p class="date">October 7, 2025</p>
-				 <p>DRAFT</p>
-				 </section>
-
-				<!-- Overview Slide -->
-				<section>
-          <h2>Recent Work</h2>
-          <ul>
-            <li>Investigation of physics errors in digital twin model</li>
-            <li>Rough first draft of future fatigue work proposal</li>
-            <li>Plan for fatigue paper</li>
-          </ul>
-        </section>
         <section>
-          <h1>Digital twin physics errors</h1>
+        <h1 class="title">
+          Nonparametric Optimal Design of Fatigue Tests
+        </h1>
+        <h2 class="subtitle">
+          FA 3.22.8
+        </h2>
+        <p class="author">Stephen Wright</p>
+        <p class="date">June 25, 2026</p>
+        <p>DRAFT</p>
         </section>
+
+        <!-- Review of last presentation -->
+         <section>
+          <section>
+            <h2>Motivation</h2>
+            <div class="block">
+              Design and analysis of components for fatigue is based on 
+              material-specific $S$-$N$ curves
+            </div>
+          </section>
+          <section>
+            <h2>Generalized $S$–$N$ Fatigue Curve</h2>
+
+            <svg viewBox="0 0 800 500" width="800" height="500">
+
+              <!-- ===== DEFINITIONS ===== -->
+              <defs>
+                <marker id="arrow1" markerWidth="8" markerHeight="8"
+                        refX="6" refY="4" orient="auto">
+                  <polygon points="0 0, 8 4, 0 8" fill="var(--lightsilver)"/>
+                </marker>
+              </defs>
+
+
+              <!-- ====== AXES ====== -->
+
+              <!-- X axis -->
+              <line x1="100" y1="420" x2="720" y2="420"
+                    stroke="var(--lightsilver)" stroke-width="2" marker-end="url(#arrow1)" />
+
+              <!-- Y axis -->
+              <line x1="100" y1="420" x2="100" y2="60"
+                    stroke="var(--lightsilver)" stroke-width="2" marker-end="url(#arrow1)" />
+
+
+
+              <!-- ====== GRID LINES ====== -->
+              <g stroke="#cccccc" stroke-width="1" stroke-dasharray="4">
+
+                <!-- horizontal stress levels -->
+                <line x1="100" y1="120" x2="720" y2="120"/>
+                <line x1="100" y1="200" x2="720" y2="200"/>
+                <line x1="100" y1="280" x2="720" y2="280"/>
+                <line x1="100" y1="350" x2="720" y2="350"/>
+
+                <!-- log cycle ticks -->
+                <line x1="220" y1="60" x2="220" y2="420"/>
+                <line x1="350" y1="60" x2="350" y2="420"/>
+                <line x1="500" y1="60" x2="500" y2="420"/>
+                <line x1="620" y1="60" x2="620" y2="420"/>
+
+              </g>
+
+
+
+              <!-- ====== S-N CURVE ====== -->
+
+              <!-- Basquin slope -->
+              <path
+                d="M 140 120
+                  C 260 260,
+                    360 300,
+                    480 320
+                  C 480 320,
+                    540 335,
+                    720 335"
+                fill="none"
+                stroke="#EF5350"
+                stroke-width="4"/>
+
+              <!-- ====== REGION LABELS ====== -->
+
+              <text
+                    x="150" y="95" font-size="18" fill="var(--lightsilver)">
+                Low-Cycle Fatigue
+              </text>
+
+              <text
+                    x="340" y="260" font-size="18" fill="var(--lightsilver)">
+                High-Cycle Fatigue
+              </text>
+
+              <text
+                    x="540" y="310" font-size="18" fill="var(--lightsilver)">
+                Endurance Limit
+              </text>
+
+            </svg>
+
+              <!-- MathJax overlay -->
+            <div style="
+                position: absolute;
+                left: 490px;
+                top: 640px;
+                font-size: 22px;
+            ">
+              $N$
+            </div>
+
+            <div style="
+                position: absolute;
+                left: 105px;
+                top: 400px;
+                font-size: 22px;
+            ">
+              $s$
+            </div>
+
+          </section>
+          <section>
+            <h2>Accelerated Fatigue Testing</h2>
+            <div class="block">
+              A common accelerated fatigue testing approach is the step-stress method
+            </div>
+            <ul>
+              <li>Iteratively test specimens at increasing stress levels until they fail</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Step-Stress Data</h2>
+            <svg viewBox="0 0 800 500" width="800" height="500">
+
+              <!-- ===== DEFINITIONS ===== -->
+              <defs>
+                <marker id="arrow4" markerWidth="8" markerHeight="8"
+                        refX="6" refY="4" orient="auto">
+                  <polygon points="0 0, 8 4, 0 8" fill="var(--lightsilver)"/>
+                </marker>
+              </defs>
+
+
+              <!-- ====== AXES ====== -->
+
+              <!-- X axis -->
+              <line x1="100" y1="420" x2="720" y2="420"
+                    stroke="var(--lightsilver)" stroke-width="2" marker-end="url(#arrow4)" />
+
+              <!-- Y axis -->
+              <line x1="100" y1="420" x2="100" y2="60"
+                    stroke="var(--lightsilver)" stroke-width="2" marker-end="url(#arrow4)" />
+
+              <!-- Stress lines -->
+              <line x1="100" y1="370" x2="202" y2="370" class="fragment fade-in"
+                    stroke="#EF5350" stroke-width="4" />      
+              <line x1="200" y1="370" x2="200" y2="320" class="fragment fade-in"
+                    stroke="#EF5350" stroke-width="4"/>      
+              <line x1="198" y1="320" x2="302" y2="320" class="fragment fade-in"
+                    stroke="#EF5350" stroke-width="4"/>      
+              <line x1="300" y1="320" x2="300" y2="270" class="fragment fade-in"
+                    stroke="#EF5350" stroke-width="4"/>      
+              <line x1="298" y1="270" x2="402" y2="270" class="fragment fade-in"
+                    stroke="#EF5350" stroke-width="4"/>      
+              <line x1="400" y1="270" x2="400" y2="220" class="fragment fade-in"
+                    stroke="#EF5350" stroke-width="4"/>      
+              <line x1="398" y1="220" x2="440" y2="220" class="fragment fade-in"
+                    stroke="#EF5350" stroke-width="4"/>      
+
+              
+              <!-- ====== EXAMPLE DATA POINTS ====== -->
+              <g class="fragment fade-in">
+                <circle
+                        cx="440" cy="220" r="6" fill="#4FC3F7"/>
+              </g>
+
+              <g class="fragment fade-in">
+                <text
+                      x="600" y="90"
+                      font-size="20"
+                      fill="#EF5350">
+                  Runout
+                </text>
+                <text
+                      x="600" y="120"
+                      font-size="20"
+                      fill="#4FC3F7">
+                  Failure
+                </text>
+              </g>
+            </svg>
+
+            <!-- MathJax overlay -->
+            <div style="
+                position: absolute;
+                left: 490px;
+                top: 580px;
+                font-size: 22px;
+            ">
+              $n$
+            </div>
+
+            <div style="
+                position: absolute;
+                left: 105px;
+                top: 330px;
+                font-size: 22px;
+            ">
+              $s$
+            </div>
+          </section>
+          <section>
+            <h2>Step-Stress Method</h2>
+            <div class="block">
+              Analysis of data requires modeling of two behaviors
+            </div>
+            <ul>
+              <li>$S$-$N$ curve behavior for constant loading amplitude</li>
+              <li>Cumulative damage from variable loading amplitude</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Hazard Model</h2>
+            <div class="block">
+              A multiplicative hazard model with time-varying covariates
+              $$\lambda(n|s(n))$$
+            </div>
+            <ul>
+              <li>Represents step-stress test data well</li>
+              <li>Combines $S$-$N$ curve and cumulative damage into a single unknown function</li>
+            </ul>
+          </section>
+         </section>
+         <section>
+          <section data-auto-animate>
+            <h2>Hazard Model</h2>
+            Let $N$ be the number of cycles to failure
+            <br>
+            Let $s(n)$ be the stresses over cycles
+
+            <div style="display: flex;">
+            <div data-id="eq1" style="flex: 1;">$\lambda[n|s(n),h,\lambda_0] = $</div>
+            <div data-id="eq2" style="flex: 1;">$\lambda_0(n)$</div>
+            <div data-id="eq3" style="flex: 1;">$\exp\{h[s(n)]\}$</div>
+            </div>
+
+          </section>
+          <section data-auto-animate>
+            <h2>Hazard Model</h2>
+            <div style="display: flex;">
+            <div data-id="eq1" style="flex: 1;">$\lambda[n|s(n),h,\lambda_0] = $</div>
+            <div data-id="eq2" style="flex: 1;">$\lambda_0(n)$</div>
+            <div data-id="eq3" style="flex: 1;">$\exp\{h[s(n)]\}$</div>
+            </div>
+            <svg viewBox="0 0 800 200" width="900" height="200">
+
+
+              <!-- Y axis -->
+              <line x1="420" y1="120" x2="420" y2="30"
+                    stroke="var(--lightsilver)" stroke-width="4" marker-end="url(#arrow1)" />
+
+              <line x1="770" y1="120" x2="770" y2="30"
+                    stroke="var(--lightsilver)" stroke-width="4" marker-end="url(#arrow1)" />
+
+
+
+              <!-- ====== S-N CURVE ====== -->
+              <!-- ====== REGION LABELS ====== -->
+
+              <text
+                    x="300" y="150" font-size="22" fill="var(--lightsilver)">
+                Baseline hazard function
+              </text>
+
+              <text
+                    x="700" y="150" font-size="22" fill="var(--lightsilver)">
+                Risk function
+              </text>
+
+              <text class="fragment fade-in"
+                    x="500" y="190" font-size="30" fill="var(--corange)">
+                Unknown functions
+              </text>
+
+
+            </svg>
+          </section>
+          <section>
+            <h2>Hazard Model</h2>
+            <div class="block">
+              The hazard model gives probability of failure for a given number of cycles, $n$, and stress, $s$
+            </div>
+            <ul>
+              <li>Constant stress amplitude or a function of stress over cycles</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Hazard Model</h2>
+              <div class="figure">
+                <img src="assets/figures/prob_field.png" style="width: 60%; height: auto;">
+                <figcaption>Probability field over stress and cycles</figcaption>
+              </div>
+          </section>
+          <section>
+            <h2>Hazard Model</h2>
+            <div class="block">
+              By drawing samples of cycles to failure from the distribution, for various values of constant stress, we can construct an probabilistic $S$-$N$ curve
+            </div>
+          </section>
+          <section>
+            <h2>Hazard Model</h2>
+            <div class="block">
+              Hazard function definition
+              $$\begin{align*}
+              \lambda[n|s(n),h,\lambda_0] & = \lim_{\Delta \rightarrow 0} \Pr\{N \in (n,n+\Delta] \\
+              &  |N > n\}/\Delta \\
+              & =\frac{f_N[n|s(n),h,\lambda_0]}{S_N[n|s(n),h,\lambda_0]}
+              \end{align*}$$
+            </div>
+          </section>
+          <section>
+            <h2>Hazard Model</h2>
+            <div class="vipr-centered">
+              <div class="vipr-scroll">
+                <img src="assets/figures/diagram.png"  style="width: 100%; height: auto;">
+              </div>
+            </div>
+          </section>
+          <section>
+            <h2>Likelihood</h2>
+            $$\begin{align*} L(N_1,\ldots,N_m | \mathbf{s}(n),h,\lambda_0) = \prod_{i=1}^m f_N(N_i|s_i(n),h,\lambda_0)\\
+            = \prod_{i=1}^m \lambda(N_i|s_i(n),h,\lambda_0) \times S_N(N_i|s_i(n),h,\lambda_0)
+            \end{align*}$$
+          </section>
+          <section>
+            <h2>Summary</h2>
+            <div class="block">
+              We have two unknown functions that must be defined
+            </div>
+            <ul>
+              <li>$h[s(n)]$</li>
+              <li>$\lambda_0(n)$</li>
+              <ul>
+                <li>This should be easy to integrate</li>
+              </ul>
+            </ul>
+          </section>
+         </section>
+         <section>
+          <section>
+            <h2>Regression Splines</h2>
+            <div class="block">
+              For a response variable $y$, with a single independent variable $x$, we can define
+              the unknown function describing their relationship via regression splines
+            </div>
+          </section>
+          <section>
+            <h2>Regression Splines</h2>
+            Regression splines split the domain of $x$ with knots, $\xi_1,\xi_2,\ldots$
+            <ul>
+              <li>$p^*$ interior knots in the interval $(\min x,\max x)$</li>
+              <li>$o$ exterior knots at both $\min x$ and $\max x$</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Regression Splines</h2>
+            <ul>
+              <li>This results in a set of $p = o + p^*$ overlapping, piecewise polynomials of degree $o-1$</li>
+              <li>The polynomials can be represented as a set of basis equations</li>
+            </ul>
+            $$g(x) = \sum_{a=1}^m b_a(x) \gamma_a$$
+          </section>
+          <section>
+            <h2>M/I Splines</h2>
+            <ul>
+              <li>M splines are a specific type of regression splines that are strictly positive</li>
+              <li>They have corresponding integrals called I splines that are monotonically increasing</li>
+            </ul>
+            $$g(x) = \sum_{a=1}^m M_a(x) \gamma_a$$
+            $$\int_0^x g(u)du = \sum_{a=1}^m I_a(x) \gamma_a$$
+          </section>
+          <section>
+            <h2>M/I splines</h2>
+            <div class="figcols">
+              <div class="figure">
+                <img src="https://jbloomlab.github.io/dms_variants/_images/dms_variants-ispline-3.png">
+                <figcaption>M spline basis functions</figcaption>
+              </div>
+              <div class="figure">
+                <img src="https://jbloomlab.github.io/dms_variants/_images/dms_variants-ispline-1.png">
+                <figcaption>I spline basis functions</figcaption>
+              </div>
+            </div>
+          </section>
+          <section>
+            <h2>M/I Splines</h2>
+            <ul>
+              <li>The coefficients $\gamma_1,\gamma_2,\ldots,\gamma_n$ are shared</li>
+              <li>Transitioning between M and I splines is simply a change of basis</li>
+            </ul>
+          </section>
+          <section>
+            <h2>M/I Splines</h2>
+            <ul>
+              <li>M splines are a highly flexible non-parametric method for estimating unknown functions</li>
+              <ul>
+                <li>Sum of overlapping piecewise polynomials over knot grid</li>
+                <li>Maintain continuity of derivatives up to $o-2$</li>
+              </ul>
+            </ul>
+          </section>
+          <section>
+            <h2>M/I Splines</h2>
+            <ul>
+              <li>Extremely efficient for calculations since the M and I bases can be precomputed</li>
+              <li>Only requires estimation of basis coefficients $\gamma_1,\ldots,\gamma_m$</li>
+            </ul>
+          </section>
+         </section>
+
+         <section>
+          <section>
+            <h2>Modeling Approach</h2>
+            <ul>
+              <li>Model the baseline hazard function, $\lambda_0(n)$, with M splines</li>
+              <ul>
+                <li>Consequently, the cumulative baseline hazard function, $\Lambda_0(n)$, is modeled by the corresponding I splines</li>
+              </ul>
+              <li>Model the risk function, $h[s(n)]$, with a separate set of M splines</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Modeling Approach</h2>
+            <div class="block">
+              $$\footnotesize \begin{align*}
+              \lambda_0(n) =& \sum_{a=1}^{m_1} M_{a,1}(n) \gamma_{a}\\
+              \Lambda_0(n) =& \sum_{a=1}^{m_1} I_{a,1}(n) \gamma_{a}\\
+              h[s(n)] =& \sum_{a=1}^{m_2} M_{a,2}[s(n)] \beta_{a}
+              \end{align*}$$
+            </div>
+          </section>
+          <section>
+            <h2>Key Benefits</h2>
+            <ul>
+              <li>Highly flexible model that is simple to evaluate</li>
+              <li>Trivial transition from $\lambda_0$ to $\Lambda_0$</li>
+              <li>The model learns the $S$-$N$ curve and the cumulative damage function</li>
+            </ul>
+          </section>
+         </section>
+
+         <!--Optimal experiment design-->
+         <section>
+          <section>
+            <h2>Optimal Experiment Design</h2>
+            <div class="block">
+              Sequential Bayesian optimal experiment design
+            </div>
+            After a test, this new data is used to update the model's posterior distributions.
+            The updated model is then used to select the next point.
+          </section>
+          <section>
+            <h2>Optimal Experiment Design</h2>
+            <ol>
+              <li>At the current state, $m$, there are $m$ previous observations</li>
+              <li>Estimate the posterior distributions: $\pi(\boldsymbol{\gamma},\boldsymbol{\beta}|\mathbf{N}^m,\mathbf{s}(n))$</li>
+              <li>Optimize next design point, $\mathbf{d} \in \mathcal{D}$ with objective function $O(\mathbf{d})$, conditioned on the posterior</li>
+              <li>Test at new design point $\mathbf{d}$</li>
+              <li>Set state to $m+1$, append new data, and repeat</li>
+            </ol>
+          </section>
+          <section>
+            <h2>Objective Function</h2>
+            <div class="block">
+              Shannon entropy
+              $$H(Y) = -\sum_Y \pi(y) \log \pi(y)$$
+            </div>
+            Measures the average amount of uncertainty in the variable $Y$
+          </section>
+          <section>
+            <h2>Objective Function</h2>
+            <div class="block">
+              We can construct our objective function based on entropy to select the design point $\mathbf{d}$
+              that maximizes the reduction in entropy for the next test point
+            </div>
+          </section>
+          <section>
+            <h2>Objective Function</h2>
+            <div class="block">
+              This is equivalent to the Kullback-Leibler divergence between the posterior distributions at current state $m$ and future state $m+1$
+              $$
+              D_{\textrm{KL}}\Big([\boldsymbol{\gamma},\boldsymbol{\beta}|\mathbf{N}^m,\mathbf{s}(n)]\Big|\Big|[\boldsymbol{\gamma},\boldsymbol{\beta}|\mathbf{N}^{m+1},\mathbf{s}(n),\mathbf{d}]\Big)
+              $$
+            </div>
+          </section>
+          <section>
+            <h2>Objective Function</h2>
+            <div class="block">
+              $$\footnotesize \begin{align*}
+              O(\mathbf{d}) = \int_{\boldsymbol{\gamma}} \int_{\boldsymbol{\beta}}\int_{N} \log 
+              \frac{\pi(\boldsymbol{\gamma},\boldsymbol{\beta}|\mathbf{N}^{m},
+              \mathbf{s}(n))}{\pi(\boldsymbol{\gamma},\boldsymbol{\beta}|\mathbf{N}^{m+1},
+              \mathbf{s}(n),\mathbf{d})} \times \\
+              \pi(\boldsymbol{\gamma},\boldsymbol{\beta}|
+              \mathbf{N}^{m},\mathbf{s}(n)) dN d\boldsymbol{\beta} d\boldsymbol{\gamma}
+              \end{align*}$$
+            </div>
+          </section>
+          <section>
+            Skipping some tedious math...
+          </section>
+          <section>
+            <h2>Objective Function</h2>
+            <div class="block">
+              $$\footnotesize \begin{align*}
+              O(\mathbf{d}) = &
+              -\int_{\boldsymbol{\gamma}} \int_{\boldsymbol{\beta}} \int_N \log\Big(\pi(N_{m+1}|\mathbf{d},\boldsymbol{\beta},\boldsymbol{\gamma})\Big) \\
+              & \pi(\boldsymbol{\gamma},\boldsymbol{\beta}|\mathbf{N}^m,\mathbf{s}(n))  dN d\boldsymbol{\beta} d\boldsymbol{\gamma} \\
+              & + \int_N \log\bigg[ \int_{\boldsymbol{\gamma}} \int_{\boldsymbol{\beta}} \pi(N_{m+1},\boldsymbol{\gamma},\boldsymbol{\beta}|\mathbf{d})d\boldsymbol{\gamma}d\boldsymbol{\beta}\bigg]\\
+              & \pi(\boldsymbol{\gamma},\boldsymbol{\beta}|\mathbf{N}^m,\mathbf{s}(n)) dN
+              \end{align*}$$ 
+            </div>
+          </section>
+         </section>
+         
+         <!-- Case study -->
         <section>
           <section>
-              <h2>Last week's discussion with Tanmay</h2>
+            <h2>Case Study</h2>
+            <div class="block">
+            Evaluate the effectiveness of the proposed model and optimal experiment design approach
+            </div>
+            <ul>
+              <li>Synthetic data from 3 parametric $S$-$N$ models and 4 cumulative damage models</li>
+            </ul>
+          </section>
+          <section>
+            <h2>$S$-$N$ and Damage Models</h2>
+            <ul>
+              <li>The $S$-$N$ model determines the number of cycles to failure at a given stress level, for constant load amplitude testin</li>
+              <li>The cumulative damage model determines how load sequence of variable load amplitude affect the cycles to failure for a specimen</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Case Study Motivation</h2>
+            <ul>
+              <li>The hazard model negates the need for specifying a cumulative damage rule</li>
+              <li>The case study highlights the model's ability to accurately predict the underlying $S$-$N$ curve regardless of which cumulative damage model is used to synthesize data</li>
+            </ul>
+          </section>
+          <section>
+            <h2>$S$-$N$ Models</h2>
+            <ul>
+              <li>MMPDS-05 regression curve</li>
+              <li>log-bilinear model</li>
+              <li>Basquin's equation</li>
+            </ul>
+            <p>All modeled to represent the $S$-$N$ curve of AISI 4340 steel at room temperature</p>
+          </section>
+          <section>
+            <h2>$S$-$N$ Models</h2>
+            <div class="figure">
+              <img src="assets/figures/sn_models.png">
+              <figcaption>Three $S$-$N$ models</figcaption>
+            </div>
+          </section>
+          <section>
+            <h2>Cumulative Damage Models</h2>
+            <ul>
+              <li>Palmgren-Miner</li>
+              <li>Kwofie-Rhabar</li>
+              <li>Manson-Halford</li>
+              <li>Modified Aeran</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>Palmgren-Miner</h2>
+            <div class="block">
+              $$D = \sum d_i = \sum \frac{n_i}{N_i}$$
+            </div>
+            <ul>
+              <li>First proposed damage model</li>
+              <li>Common due to its simplicity</li>
+              <li>Inaccurate, does not consider effects of loading sequence</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Kwofie-Rhabar</h2>
+            <div class="block">
+              $$D = \sum_i d_i = \sum_i \frac{n_i}{N_i} \frac{\ln N_i}{\ln N_1}$$
+            </div>
+            <ul>
+              <li>Modification of Palmgren-Miner</li>
+              <li>Adds an interaction coefficient to account for loading sequence</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Manson-Halford</h2>
+            <div class="block">
+              $$\footnotesize \begin{align*}
+              D = \bigg[ \left[ \left[ \left(\frac{n_1}{N_1}
+               \right)^{\alpha_{1,2}} + \frac{n_2}{N_2}\right]^{\alpha_{2,3}}
+                + \frac{n_3}{N_3} \right]^{\alpha_{3,4}} \\
+                + \cdots +
+                \frac{n_{i-1}}{N_{i-1}} \bigg]^{\alpha_{i-1,i}} + \frac{n_i}{N_i}
+              \end{align*}$$
+            </div>
+            where $\alpha_{i-1,i} = \left(\frac{N_{i-1}}{N_i}\right)^{0.4}$
+          </section>
+          <section>
+            <h2>Manson-Halford</h2>
+            <ul>
+              <li>Further improvement on the Palmgren-Miner model</li>
+              <li>Recursive interaction affects, better accounting for load sequence</li>
+              <li>Truly non-linear damage model</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Modified Aeran</h2>
+            <div class="block">
+              $$D_{i+1} = \left|1 - \left[1 - \frac{n_{(i+1),total}}{N_{i+1}} \right]^{\delta_{i+1}} \right|$$
+            </div>
+            where $\delta_i = \frac{-1.25}{\ln N_i}$
+          </section>
+          <section>
+            <h2>Modified Aeran</h2>
+            and $n_{(i+1),total} = n_{(i+1),eff} + n_{(i+1)}$
+          with $n_{(i+1),eff} = N_{i+1} \left[1 - \left(1 - D_i \right)^{\frac{\mu_{i+1}}{\delta_{i+1}}} \right]$
+          and $\mu_{i+1} = \left(\frac{s_i}{s_{i+1}} \right)^2$
+          </section>
+          <section>
+            <h2>Modified Aeran</h2>
+            <ul>
+              <li>Also a truly non-linear damage model</li>
+              <li>Dual-exponential form with $\delta_{i+1}$ and $\mu_{i+1}$ to account for loading sequence</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Cumulative Damage Models</h2>
+            <div class="figcols">
+              <div class="figure">
+                <img src="assets/figures/cumulative_damage-increasing.png">
+                <figcaption>Cumulative damage models for increasing stress</figcaption>
+              </div>
+              <div class="figure">
+                <img src="assets/figures/cumulative_damage-decreasing.png">
+                <figcaption>Cumulative damage models for decreasing stress</figcaption>
+              </div>
+            </div>
+          </section>
+          <section>
+            <h2>Procedure</h2>
+            <ol>
+              <li>Synthesize small initial data set with 3 independent observations of 8 step-stress test configurations (same for all cases)</li>
+              <li>Draw samples from posterior distributions</li>
+              <li>Optimize objective function, $O(\mathbf{d})$ to select next test point, $\mathbf{d}$</li>
+              <li>Synthesize data with design $\mathbf{d}$</li>
+              <li>Repeat from step 2</li>
+            </ol>
+          </section>
+          <section>
+            <h2>1. Data Synthesis</h2>
+            <div class="figcols">
+              <div>
               <ul>
-                <li>RHR coordinate system</li>
+                <li>Given: $s_0$, $\Delta s$, and $n_0$</li>
+                <li>Sample strength of specimen: $R \sim 10^{\textrm{N}(0,0.1)}$</li>
+                <li>Iteratively evaluate damage for each cycle count and stress level until $D=1$</li>
+              </ul>
+              </div>
+              <div class="figure" style="width: 120%; height: auto;">
+                <img src="assets/figures/data_synthesis.png">
+                <figcaption>Data synthesis iterative evaluations.</figcaption>
+              </div>
+            </div>
+          </section>
+          <section>
+            <h2>2. Posterior Sampling</h2>
+            <div class="figcols">
+              <div>
                 <ul>
-                  <li>positive $x$ is forward</li>
-                  <li>positive $y$ is left</li>
-                  <li>positive $z$ is up</li>
+                  <li>Bayes' theorem: 
+                    $$\footnotesize \begin{align*}
+                    \pi(\boldsymbol{\gamma},\boldsymbol{\beta}|
+                    \mathbf{N},\mathbf{s}(n)) \propto  \\
+                    \pi(\mathbf{N}|
+                    \mathbf{s}(n),\boldsymbol{\gamma},\boldsymbol{\beta}) \times \\
+                    \pi(\boldsymbol{\gamma}) 
+                    \pi(\boldsymbol{\beta})
+                    \end{align*}$$</li>
+                  <li>Metropolis-Hastings to sample the spline coefficients: $\boldsymbol{\beta}$ and $\boldsymbol{\gamma}$</li>
                 </ul>
-                <li>When the vehicle accelerates, pitch should be negative</li>
-                <li>$M_y$ should use negative terms for upward force applied in front of CG</li>
-              </ul>
-          </section>
-
-        </section>
-
-        <section>
-          <section>
-            <h2>Current digital twin</h2>
-            <figure>
-							<img src="assets/figures/original/absolute_angles.png" style="width: 75%">
-							<figcaption>Absolute suspension arm angles, experiment and model.</figcaption>
-						</figure>
+              </div>
+              <div class="figure" style="width: 120%; height: auto;">
+                <img src="assets/figures/beta_histograms.png">
+                <figcaption>Posterior histograms of $\boldsymbol{\beta}$</figcaption>
+              </div>
+            </div>
           </section>
           <section>
-            <figure>
-							<img src="assets/figures/original/relative_angles.png" style="width: 75%">
-							<figcaption>Relative suspension arm angles, model.</figcaption>
-						</figure>
+            <h2>3. Design Optimization</h2>
+            <div class="figcols">
+              <div>
+                <ul>
+                  <li>Identify a test design,$\mathbf{d} = (s_0, \Delta s, n_0)$ that maximize the reduction in entropy</li>
+                  <li>This corresponds to the greatest increase in information</li>
+                </ul>
+              </div>
+              <div class="figure" style="width: 120%; height: auto;">
+                <img src="assets/figures/design_points.png">
+                <figcaption>Selected design points over 50 epochs</figcaption>
+              </div>
+            </div>
           </section>
           <section>
-            <figure>
-							<img src="assets/figures/original/pitch.png" style="width: 75%">
-							<figcaption>Pitch, experiment and model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/original/z_coords.png" style="width: 75%">
-							<figcaption>$Z$ coordinates of suspension arm joints, model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/original/z_force.png" style="width: 75%">
-							<figcaption>$Z$ forces at suspension arm joints.</figcaption>
-						</figure>
-          </section>
-        </section>
-
-        <section>
-          <section>
-            <h2>Observed problems</h2>
+            <h2>4. New Synthesis and Repetition</h2>
             <ul>
-              <li>Changes in suspension arm location during acceleration are opposite what we would expect</li>
-              <ul>
-                <li>It turns out the location calculations are done using the negative of the pitch</li>
-              </ul>
+              <li>New data is synthesized, as previously described, based on the proposed test configuration</li>
+              <li>The data is appended to the existing data set and the process repeats until it is terminated</li>
             </ul>
           </section>
-
-          <section>
-            <h2>Suspension Calculations</h2>
-            <ul>
-              <li>Pitch is the rotation about $y$</li>
-              <li>Given the RHR, rotating forward is positive, rotating backward is negative</li>
-              <li>$(x,z)$ coordinates of the suspension arm joints are calculated based on pitch</li>
-            </ul>
-          </section>
-          <section>
-            $$\mathbf{X}^{cg,0} = \begin{bmatrix}
-              0 & H_{cg} \\
-              0 & H_{cg} \\
-              \vdots & \vdots \\
-              0 & H_{cg}
-              \end{bmatrix}_{5,2}
-            $$
-
-          </section>
-          <section>
-            $$\mathbf{X}^0 = 1E\textrm{-}3\begin{bmatrix}
-              1044.73 &    455.369\\
-                      646.529 &    330.467\\
-                      228.9325 &   326.386\\
-                      -188.664 &  322.305\\
-                      -782.712 &  300\\
-              \end{bmatrix}
-              - 32 \times \mathbf{1}_{5,2}
-            $$
-          </section>
-          <section>
-            $$\mathbf{X}^* = \begin{bmatrix}
-              0 & z_{cg} \\
-              0 & z_{cg} \\
-              \vdots & \vdots \\
-              0 & z_{cg}
-              \end{bmatrix}_{10,2}
-            $$
-          </section>
-          <section>
-            $$\Delta_{\theta} \mathbf{X} = (\mathbf{X}^{0} - \mathbf{X}^{cg,0}) \times \begin{bmatrix}
-              \cos(-\theta) & -\sin(-\theta) \\
-              \sin(-\theta) & \cos(-\theta)
-            \end{bmatrix}$$
-          </section>
-          <section>
-            $$ \Delta_{\phi}  \mathbf{X} = \begin{bmatrix} 
-              0 & l_\textrm{tr} \sin(\phi) w_{\textrm{tr}}/2 \\
-              0 & l_\textrm{tr} \sin(\phi) w_{\textrm{tr}}/2 \\
-              \vdots & \vdots \\
-              0 & l_\textrm{tr} \sin(\phi) w_{\textrm{tr}}/2
-              \end{bmatrix}_{10,2}
-            $$
-          </section>
-          <section>
-            $$\mathbf{X}^{t+1} = \mathbf{X}^* + \Delta_{\theta} \mathbf{X} + \Delta_{\phi} \mathbf{X}$$
-            $$\mathbf{z}^{t+1} = [\mathbf{X}^{t+1}_{i,j}]; \space i = 1,\ldots,10, \space j = 2$$
-            $$\mathbf{z}^* = (\mathbf{z}^{t+1} - R_{\textrm{wheel}} \times \mathbf{1}_{10} - t_{\textrm{tr}}\times \mathbf{1}_{10})$$
-            $$\boldsymbol{\alpha}^* = [\sin^{-1}(\mathbf{z}^*_i / l_{\textrm{arm}})]; \space i = 1,\ldots,10$$
-          </section>
-          <section>
-            $$\boldsymbol{\alpha}'^{t+1} = \boldsymbol{\alpha}_0 + \phi$$
-            $$\boldsymbol{\alpha}^{t+1} = \min(\boldsymbol{\alpha}'^{t+1},\boldsymbol{\alpha}^*)$$
-            $$\Delta \boldsymbol{\alpha}^{t+1} = \boldsymbol{\alpha}^{t+1} - \boldsymbol{\alpha}'^{t+1}$$
-            $$\mathbf{v}_{\alpha} = (\boldsymbol{\alpha}^{t+1}-\boldsymbol{\alpha}^t)/dt$$
-            
-          </section>
-
-          <section>
-            <div class="alertblock">Positive pitch should be used!</div>
-            $$\Delta_{\theta} \mathbf{X} = (\mathbf{X}^{0} - \mathbf{X}^{cg,0}) \times \begin{bmatrix}
-              \cos(\theta) & -\sin(\theta) \\
-              \sin(\theta) & \cos(\theta)
-            \end{bmatrix}$$
-          </section>
-        </section>
-
-        <section>
-          <section>
-            <h2>Moment calculations</h2>
-            <div class="alertblock">Moment calculations make no sense!</div>
-          </section>
-          <section>
-            <h2>Force diagram</h2>
-            <figure>
-              <img src="assets/figures/diagram.png" style="width: 75%">
-              <figcaption>Force diagram of vehicle</figcaption>
-            </figure>
-          </section>
-          <section>
-            <ul>
-              <li>Positive $F_1$ and $F_2$, applied at a positive $x$ distance from the CG, should result in a negative rotation about $y$</li>
-              <li>Positive $F_3$ and $F_4$, applied at a negative $x$ distance from the CG, should result in a positive rotation about $y$</li>
-              <li>Positive $F_x$ should result in a negative rotation about $y$</li>
-            </ul>
-          </section>
-          <section>
-            $$\mathbf{x}^{t+1} = [\mathbf{X}^{t+1}_{i,j}]; \space i = 1,\ldots,10, \space j = 1$$
-            $$\mathbf{x}_{F_z} = \mathbf{x}^{t+1} - l_{\textrm{arm}} \cos(\Delta\boldsymbol{\alpha}^{t+1})$$
-            $$\boldsymbol{\tau}_{\textrm{arm}} = k_{\tau} \Delta\boldsymbol{\alpha}^{t+1} + c_{\tau} \mathbf{v}_{\alpha}$$
-            $$\mathbf{F}_z = \boldsymbol{\tau}_{\textrm{arm}}/(l_{\textrm{arm}} \cos(\boldsymbol{\alpha}^{t+1}))$$
-            $$\mathbf{M}'_y = \mathbf{F}_z^+ \mathbf{x}_{F_z}$$
-            $$\Sigma M_y = \sum \mathbf{M}'_y - \mathbf{F}_x z_{cg}$$
-          </section>
-          <section>
-            <div class="alertblock">Code uses positive $ \mathbf{F}_z^+ \mathbf{x}_{F_z}$ and negative $\mathbf{F}_x z_{cg}$</div>
-            <div class="alertblock">Code uses $ \mathbf{F}_z^+$, not subtracting gravitational force</div>
-          </section>
-        </section>
-
-        <section>
-          <section>
-            <h2>Additional observation</h2>
-            <div class="alertblock">Wild net moment values during settling</div>
-          </section>
-          <section>
-            <figure>
-              <img src="assets/figures/net_moment.png" style="width: 100%">
-							<figcaption>$\Sigma M_y$</figcaption>
-            </figure>
-          </section>
-        </section>
-
-        <section>
-          <section>
-            <h2>Using proper pitch</h2>
-            <figure>
-							<img src="assets/figures/nonneg_pitch/absolute_angles.png" style="width: 75%">
-							<figcaption>Absolute suspension arm angles, experiment and model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/nonneg_pitch/relative_angles.png" style="width: 75%">
-							<figcaption>Relative suspension arm angles, model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/nonneg_pitch/pitch.png" style="width: 75%">
-							<figcaption>Pitch, experiment and model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/nonneg_pitch/z_coords.png" style="width: 75%">
-							<figcaption>$Z$ coordinates of suspension arm joints, model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/nonneg_pitch/z_force.png" style="width: 75%">
-							<figcaption>$Z$ forces at suspension arm joints.</figcaption>
-						</figure>
-          </section>
-        </section>
-
-        <section>
-          <section>
-            <h2>Using correct moment sign</h2>
-            <figure>
-							<img src="assets/figures/moment_sign/absolute_angles.png" style="width: 75%">
-							<figcaption>Absolute suspension arm angles, experiment and model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/moment_sign/relative_angles.png" style="width: 75%">
-							<figcaption>Relative suspension arm angles, model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/moment_sign/pitch.png" style="width: 75%">
-							<figcaption>Pitch, experiment and model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/moment_sign/z_coords.png" style="width: 75%">
-							<figcaption>$Z$ coordinates of suspension arm joints, model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/moment_sign/z_force.png" style="width: 75%">
-							<figcaption>$Z$ forces at suspension arm joints.</figcaption>
-						</figure>
-          </section>
-        </section>
-
-        <section>
-          <section>
-            <h2>Fixing both</h2>
-            <figure>
-							<img src="assets/figures/pitch_and_moment/absolute_angles.png" style="width: 75%">
-							<figcaption>Absolute suspension arm angles, experiment and model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/pitch_and_moment/relative_angles.png" style="width: 75%">
-							<figcaption>Relative suspension arm angles, model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/pitch_and_moment/pitch.png" style="width: 75%">
-							<figcaption>Pitch, experiment and model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/pitch_and_moment/z_coords.png" style="width: 75%">
-							<figcaption>$Z$ coordinates of suspension arm joints, model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/pitch_and_moment/z_force.png" style="width: 75%">
-							<figcaption>$Z$ forces at suspension arm joints.</figcaption>
-						</figure>
-          </section>
-        </section>
-
-        <section>
-          <section>
-            <h2>Tanmay's code</h2>
-            <ul>
-              <li>Tanmay also uses $-\theta$ for the transformation matrix in his code</li>
-              <li>He uses positive $ \mathbf{F}_z^+ \mathbf{x}_{F_z}$ and positive $\mathbf{F}_x z_{cg}$ for the moment calculation</li>
-            </ul>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/pos_moment/absolute_angles.png" style="width: 75%">
-							<figcaption>Absolute suspension arm angles, experiment and model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/pos_moment/relative_angles.png" style="width: 75%">
-							<figcaption>Relative suspension arm angles, model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/pos_moment/pitch.png" style="width: 75%">
-							<figcaption>Pitch, experiment and model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/pos_moment/z_coords.png" style="width: 75%">
-							<figcaption>$Z$ coordinates of suspension arm joints, model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/pos_moment/z_force.png" style="width: 75%">
-							<figcaption>$Z$ forces at suspension arm joints.</figcaption>
-						</figure>
-          </section>
-        </section>
-
-        <section>
-          <section>
-            <h2>Using net forces</h2>
-            Currently, the code uses the total $F_z$ to calculate $M_y$
-            $$\boldsymbol{\tau}_{\textrm{arm}} = k_{\tau} \Delta\boldsymbol{\alpha}^{t+1} + c_{\tau} \mathbf{v}_{\alpha}$$
-            $$\mathbf{F}_z = \boldsymbol{\tau}_{\textrm{arm}}/(l_{\textrm{arm}} \cos(\boldsymbol{\alpha}^{t+1}))$$
-            I would think that the net force should be used.
-            $$\mathbf{F}_z = \boldsymbol{\tau}_{\textrm{arm}}/(l_{\textrm{arm}} \cos(\boldsymbol{\alpha}^{t+1})) - mg$$
-          </section>
-          <section>
-            <h4>Using net force with negative pitch and positive moment terms</h4>
-            <figure>
-							<img src="assets/figures/net_force/absolute_angles.png" style="width: 75%">
-							<figcaption>Absolute suspension arm angles, experiment and model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/net_force/relative_angles.png" style="width: 75%">
-							<figcaption>Relative suspension arm angles, model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/net_force/pitch.png" style="width: 75%">
-							<figcaption>Pitch, experiment and model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/net_force/z_coords.png" style="width: 75%">
-							<figcaption>$Z$ coordinates of suspension arm joints, model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/net_force/z_force.png" style="width: 75%">
-							<figcaption>$Z$ forces at suspension arm joints.</figcaption>
-						</figure>
-          </section>
         </section>
         <section>
           <section>
-            <h4>Using net force with positive pitch and positive moment terms</h4>
-            <figure>
-							<img src="assets/figures/net_force_positive_pitch/absolute_angles.png" style="width: 75%">
-							<figcaption>Absolute suspension arm angles, experiment and model.</figcaption>
-						</figure>
+            <h2>Results</h2>
+            <div class="figure">
+              <img src="assets/figures/test_histories.png" style="width: 50%; height: auto;">
+              <figcaption>Example loading designs for the MMPDS-05, modified Aeran case</figcaption>
+            </div>
           </section>
           <section>
-            <figure>
-							<img src="assets/figures/net_force_positive_pitch/relative_angles.png" style="width: 75%">
-							<figcaption>Relative suspension arm angles, model.</figcaption>
-						</figure>
+            <h2>Results</h2>
+            <div class="figure">
+              <img src="assets/figures/mmpds-all-t_samples.png" style="width: 50%; height: auto;">
+              <figcaption>Model estimates for each damage model and the MMPDS-05 $S$-$N$ model</figcaption>
+            </div>
           </section>
           <section>
-            <figure>
-							<img src="assets/figures/net_force_positive_pitch/pitch.png" style="width: 75%">
-							<figcaption>Pitch, experiment and model.</figcaption>
-						</figure>
+            <h2>Results</h2>
+            <div class="figure">
+              <img src="assets/figures/bilinear-all-t_samples.png" style="width: 50%; height: auto;">
+              <figcaption>Model estimates for each damage model and the log-bilinear $S$-$N$ model</figcaption>
+            </div>
           </section>
           <section>
-            <figure>
-							<img src="assets/figures/net_force_positive_pitch/z_coords.png" style="width: 75%">
-							<figcaption>$Z$ coordinates of suspension arm joints, model.</figcaption>
-						</figure>
+            <h2>Results</h2>
+            <div class="figure">
+              <img src="assets/figures/basquin-all-t_samples.png" style="width: 50%; height: auto;">
+              <figcaption>Model estimates for each damage model and the Basquin $S$-$N$ model</figcaption>
+            </div>
           </section>
           <section>
-            <figure>
-							<img src="assets/figures/net_force_positive_pitch/z_force.png" style="width: 75%">
-							<figcaption>$Z$ forces at suspension arm joints.</figcaption>
-						</figure>
-          </section>
-        </section>
-        <section>
-          <section>
-            <h4>Using net force with positive pitch and negative moment terms</h4>
-            <figure>
-							<img src="assets/figures/net_force_positive_pitch_negative_moment/absolute_angles.png" style="width: 75%">
-							<figcaption>Absolute suspension arm angles, experiment and model.</figcaption>
-						</figure>
+            <h2>Discussion</h2>
+            <div class="block">
+              The multiplicative hazard model is able to match various $S$-$N$ models well and shows to be unaffected by the choice of cumulative damage model used to synthesize the data
+            </div>
           </section>
           <section>
-            <figure>
-							<img src="assets/figures/net_force_positive_pitch_negative_moment/relative_angles.png" style="width: 75%">
-							<figcaption>Relative suspension arm angles, model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/net_force_positive_pitch_negative_moment/pitch.png" style="width: 75%">
-							<figcaption>Pitch, experiment and model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/net_force_positive_pitch_negative_moment/z_coords.png" style="width: 75%">
-							<figcaption>$Z$ coordinates of suspension arm joints, model.</figcaption>
-						</figure>
-          </section>
-          <section>
-            <figure>
-							<img src="assets/figures/net_force_positive_pitch_negative_moment/z_force.png" style="width: 75%">
-							<figcaption>$Z$ forces at suspension arm joints.</figcaption>
-						</figure>
-          </section>
-        </section>
-
-        <section>
-          <section>
-            <h2>Fatigue work proposal</h2>
-            <ul>
-              <li>Initial rough draft of proposal for future fatigue work</li>
-              <li>Literature review</li>
-              <ul>
-                <li>fatigue life models</li>
-                <li>microstructure models</li>
-                <li>weld process modeling</li>
-              </ul>
-              <li>Functional decomposition of problem</li>
-              <ul>
-                <li>Breaking down large problem into isolated subproblems that can be combined at the end</li>
-              </ul>
-            </ul>
-          </section>
-          <section>
-            <h2>Proposed topic for fatigue paper</h2>
-            <ul>
-              <li>Optimization of fatigue experiments</li>
-              <li>Combination of Bayesian model calibration, Bayesian experiment design, and Bayesian optimizaiton</li>
-              <li>Gaussian process model to apply these techniques</li>
-            </ul>
+            <h1>Questions</h1>
           </section>
         </section>
 			</div>
@@ -523,6 +800,73 @@
 				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX, RevealMenu ]
 			});
 		</script>
+    <script>
+
+      // ===== Generate sinusoidal waveform =====
+
+      function generateSinePath() {
+
+        const startX = 100;
+        const endX = 820;
+        const width = endX - startX;
+
+        const meanY = 240;
+        const amplitude = 60;
+        const cycles = 12;
+
+        const samples = 250;
+
+        let d = "";
+
+        for (let i = 0; i <= samples; i++) {
+
+          const t = i / samples;
+          const x = startX + width * t;
+
+          const y = meanY - amplitude *
+                    Math.sin(2 * Math.PI * cycles * t - Math.PI / 2);
+
+          if (i === 0)
+            d += `M ${x} ${y}`;
+          else
+            d += ` L ${x} ${y}`;
+        }
+
+        return d;
+      }
+
+
+
+
+      </script>
+    <script>
+      // Run whenever slide becomes active
+      Reveal.on("slidechanged", event => {
+
+        const slide = event.currentSlide;
+
+        const sine = slide.querySelector("#sineWave");
+
+        if (sine && !sine.getAttribute("d")) {
+          sine.setAttribute("d", generateSinePath());
+        }
+
+      });
+
+
+      // Also run if this slide is the first slide shown
+      Reveal.on("ready", event => {
+
+        const slide = event.currentSlide;
+
+        const sine = slide.querySelector("#sineWave");
+
+        if (sine) {
+          sine.setAttribute("d", generateSinePath());
+        }
+
+      });
+    </script>
 
 	</body>
 </html>
