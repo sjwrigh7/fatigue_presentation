@@ -4,16 +4,24 @@
 @import url(./dist/theme/fonts/source-sans-pro/source-sans-pro.css);
 
 :root {
-  --backblue: #394957;
+  /*--backblue: #394957;
   --lightsilver: #ebedf0;
-  --corange: #f36f20;
+  --corange: #f36f20;*/
+  --orange1: rgb(245,102,0);
+  --white1: rgb(255,255,255);
+  --purp1: rgb(82,45,128);
+  --gray1: rgb(140,130,121);
+  --gray2: rgb(51,51,51);
+  --purp2: rgb(46,26,71);
+  --orange2: rgb(185,71,0);
+
 }
 
 /* Base slide background and text */
 .reveal {
   font-family: 'Roboto', sans-serif;
-  background-color: var(--backblue);
-  color: var(--lightsilver);
+  background-color: var(--white1);
+  color: var(--purp2);
 }
 
 /* Figures and Captions */
@@ -28,6 +36,7 @@
     text-align: center;
     font-size: 0.65em;
     margin-top: 0em;
+    justify-content: center;
 }
 
 .reveal .figcols {
@@ -37,25 +46,27 @@
     margin-top: 0em;
 }
 
-
-
+.reveal .slides p{ text-align: justify;}
+.reveal .slides { text-align: left;}
+.reveal .slides h2{ text-align: center;}
 
 .reveal .slides figcaption::before {
     content: "Figure: ";
-    color: var(--lightsilver);
+    color: var(--purp2);
     text-align: center;
     font-style: italic;
     font-weight: bold;
     margin-top: 0.4em;
 }
 .reveal .slides figcaption{
-    color: var(--lightsilver);
+    color: var(--purp2);
     text-align: center;
     font-style: italic;
+    font-size: 20pt;
 }
 
 /* Headings */
-.reveal h1,
+/*.reveal h1,
 .reveal h2,
 .reveal h3,
 .reveal h5,
@@ -63,76 +74,157 @@
 .reveal h4 {
   color: var(--lightsilver);
 }
+  */
 
+#header {
+  position: absolute;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    /*background: var(--purp2);*/
+    color: var(--white1);
+    background-color: var(--purp2);
+    font-size: 16pt;
+    z-index: 5;
+}
 
-.reveal h2.subtitle {
-  color: var(--corange);
+#header-left {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    /*background: var(--purp2);*/
+    color: var(--white1);
+    background-color: var(--purp2);
+    font-size: 16pt;
+    z-index: 10;
+}
+.top1 {
+    /*background: url(../../images/background_bar_h100.png) top left repeat-x;*/
+    /*background: var(--purp2);*/
+    background-color: var(--purp2);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3.5%;
+    z-index: 1;
+}
+.top2 {
+    /*background: url(../../images/background_bar_h100.png) top left repeat-x;*/
+    /*background: var(--purp2);*/
+    background-color: var(--white1);
+    position: absolute;
+    top: 3.5%;
+    left: 0;
+    width: 100%;
+    height: 0.5%;
+    z-index: 1;
+}
+.top3 {
+    /*background: url(../../images/background_bar_h100.png) top left repeat-x;*/
+    /*background: var(--purp2);*/
+    background-color: var(--orange1);
+    position: absolute;
+    top: 4%;
+    left: 0;
+    width: 100%;
+    height: 0.5%;
+    z-index: 1;
+}
+.bot1 {
+    /*background: url(../../images/background_bar_h100.png) top left repeat-x;*/
+    /*background: var(--purp2);*/
+    background-color: var(--purp2);
+    position: absolute;
+    top: 98%;
+    left: 0;
+    width: 100%;
+    height: 2%;
+    z-index: 1;
+}
+
+.reveal h1 {
+  color: var(--orange1);
+}
+
+.reveal h2 {
+  color: var(--orange2);
 }
 
 .reveal h3.subtitle {
-    color: var(--corange);
+    color: var(--purp1);
 }
-.reveal h4.subtitle {
-    color: var(--corange);
+.reveal h4 {
+    color: var(--gray1);
+    text-align: center;
 }
+
+.reveal .slides h6 {
+  position: absolute;
+  top: 0em;
+  left: 0em;
+  color: var(--orange1);
+}
+
 
 /* Titles */
 .reveal .title {
-  color: var(--lightsilver);
+  color: var(--orange1);
 }
 .reveal .subtitle {
-  color: var(--corange);
+  color: var(--gray1);
 }
 .reveal .author,
 .reveal .date {
-  color: var(--lightsilver);
+  color: var(--purp2);
 }
 
 /* Lists and items */
 .reveal ul li {
-  color: var(--lightsilver);
+  color: var(--purp1);
 }
 .reveal ul li::marker {
-  color: var(--corange);
+  color: var(--purp1);
 }
 .reveal ol li {
-  color: var(--lightsilver);
+  color: var(--purp2);
 }
 .reveal ol li::marker {
-  color: var(--corange);
+  color: var(--purp2);
 }
 
 /* Blocks */
 .block {
   background: rgba(235, 237, 240, 0.1);
-  border-left: 4px solid var(--corange);
+  border-left: 4px solid var(--orange1);
   padding: 1em;
   margin: 1em 0;
 }
 .alertblock {
   background: rgba(243, 111, 32, 0.15);
-  border-left: 4px solid var(--corange);
+  border-left: 4px solid var(--orange1);
   padding: 1em;
 }
 .exampleblock {
   background: rgba(235, 237, 240, 0.2);
-  border-left: 4px solid var(--lightsilver);
+  border-left: 4px solid var(--purp2);
   padding: 1em;
 }
 
 /* Frametitling style (imitates Beamer bar) */
 .reveal .slide-header {
-  background-color: var(--backblue);
-  color: var(--lightsilver);
+  background-color: var(--purp1);
+  color: var(--white1);
   text-align: center;
   padding: 0.3em;
-  border-bottom: 2px solid var(--corange);
+  border-bottom: 2px solid var(--orange1);
 }
 
 /* Footline (if you use a footer plugin) */
 .reveal .slide-footer {
-  background-color: var(--backblue);
-  color: var(--lightsilver);
+  background-color: var(--purp1);
+  color: var(--purp2);
   text-align: center;
   padding: 0.3em;
   border-top: 2px solid var(--corange);

@@ -1,0 +1,157 @@
+<section>
+    <section>
+        <h1>Bayesian Model Calibration</h1>
+    </section>
+    <section data-header="Bayesian Model Calibration [Introduction]">
+        <h2>Bayes' Theorem</h2>
+        The objective is to learn about unknown model parameters, $\boldsymbol{\theta} = (\theta_1,\theta_2,\ldots,\theta_P)$ through Bayesian inference
+        <div class="block">
+            Bayes' theorem
+            $$\pi(\boldsymbol{\theta}|\mathbf{y}) = \frac{\pi(\mathbf{y}|\boldsymbol{\theta}) \pi(\boldsymbol{\theta})}{\pi(\mathbf{y})}$$
+        </div>
+    </section>
+
+    <section data-header="Bayesian Model Calibration [Introduction]">
+        <h2>Bayes' Theorem</h2>
+        <ul>
+            <li>Posterior, $\pi(\boldsymbol{\theta}|\mathbf{y})$</li>
+            <li>Likelihood, $\pi(\mathbf{y}|\boldsymbol{\theta})$</li>
+            <li>Prior, $\pi(\boldsymbol{\theta})$</li>
+            <li>Evidence, $\pi(\mathbf{y})$</li>
+        </ul>
+    </section>
+    <section data-header="Bayesian Model Calibration [Introduction]">
+        <h2>Bayes' Theorem</h2>
+        <h4>Likelihood</h4>
+        For independent and identically distributed (i.i.d.) data
+        $$\pi(\mathbf{y}|\theta) = \prod_{i=1}^N \pi(Y=y_i|\theta)$$
+    </section>
+    <section data-header="Bayesian Model Calibration [Introduction]">
+        <h2>Bayes' Theorem</h2>
+        <h4>Evidence</h4>
+        For i.i.d. data
+        $$\pi(\mathbf{y}) = \prod_{i=1}^N \pi(Y=y_i) = \prod_{i=1}^N \int_{\theta} \pi(y_i|\theta) \pi(\theta) d\theta$$
+    </section>
+    <section data-header="Bayesian Model Calibration [Introduction]">
+        <h2>Bayes' Theorem</h2>
+        <h4>Evidence</h4>
+        <ul>
+            <li>$\prod_{i=1}^N \int_{\theta} \pi(y_i|\theta) \pi(\theta) d\theta$ is often intractable</li>
+            <li>$\pi(\mathbf{y})$ does not depend on $\boldsymbol{\theta}$, it is a normalizing constant</li>
+        </ul>
+        <div class="block">
+            $$\pi(\boldsymbol{\theta}|\mathbf{y}) \propto \pi(\mathbf{y}|\boldsymbol{\theta}) \pi(\boldsymbol{\theta})$$
+        </div>
+    </section>
+
+    <section data-header="Bayesian Model Calibration [Introduction]">
+        <h2>Bayes' Theorem</h2>
+        <h4>Evidence</h5>
+        Numerical methods, like Markov Chain Monte Carlo (MCMC) simulation, can be used with this proportional distribution
+        <ul>
+            <li>Draw finite samples of $\pi(\boldsymbol{\theta}|\mathbf{y})$</li>
+            <li>Can be computationally expensive</li>
+        </ul>
+    </section>
+
+    <section data-header="Bayesian Model Calibration [Data Model]">
+        <h2>Data Representation</h2>
+        Experimental data has the form
+        $$y_i|\mathbf{x}_i = f(\mathbf{x}_i) + \varepsilon(\mathbf{x}_i)$$
+        <ul>
+            <li>$f(\mathbf{x})$ is an unknown function describing the physical phenomenon being measured</li>
+            <li>$\varepsilon$ is observational error (aleatoric)</li>
+            <li>$\mathbf{x}_i = (x_{1,i},x_{2,i},\ldots,x_{Q,i})$ are independent variables</li>
+        </ul>
+    </section>
+    <section data-auto-animate data-header="Bayesian Model Calibration [Data Model]">
+        <h2>Computer Model</h2>
+
+        <div data-id="keep">
+        A computer model can be used to approximate $f(\cdot)$
+        $$ y_i|\mathbf{x}_i = g(\mathbf{x}_i,\boldsymbol{\theta}) + \delta(\mathbf{x}_i) + \varepsilon(\mathbf{x}_i)$$
+        </div>
+        <p class="fragment fade-in-then-out">The computer model, $g(\cdot,\cdot)$ requires specification of unknown parameters, $\boldsymbol{\theta} = (\theta_1,\theta_2,\ldots,\theta_P)$</p>
+    </section>
+
+    <section data-auto-animate data-header="Bayesian Model Calibration [Data Model]">
+        <h2>Computer Model</h2>
+        <div data-id="keep">
+        A computer model can be used to approximate $f(\cdot)$
+        $$ y_i|\mathbf{x}_i = g(\mathbf{x}_i,\boldsymbol{\theta}) + \delta(\mathbf{x}_i) + \varepsilon(\mathbf{x}_i)$$
+        </div>
+        <p>The new term, $\delta(\mathbf{x})$ is the discrepancy term and describes inaccuracies or missing physics in the computer model (epistemic error)</p>
+    </section>
+
+    <section data-header="Bayesian Model Calibration [Data Model]">
+        <h2>Discrepancy Term</h2>
+        The discrepancy term is traditionally modeled as a Gaussian process
+        $$\delta(\mathbf{x}) \sim \textrm{GP}(\mu(\mathbf{x}),\Sigma(\mathbf{x},\mathbf{x}'))$$
+        
+        Example covariance structure (from Higdon et al. [7])
+        $$\Sigma(\mathbf{x},\mathbf{x}') = \tau^2 \prod_{k=1}^{Q} \rho_k^{4 (x_k - x_k')^2}$$
+    </section>
+
+    <section data-header="Bayesian Model Calibration [Data Model]">
+        <h2>Surrogate Modeling</h2>
+        <ul>
+            <li>The MCMC approach requires evaluating the likelihood many thousands of times</li>
+            <li>Each evaluation of the likelihood requires evaluating $g(\cdot,\cdot)$ for an arbitrary input of $\boldsymbol{\theta}$</li>
+            <li>For most computer models it is computationally infeasible to evaulate the computer model directly</li>
+            <li>A surrogate model, $\eta(\cdot,\cdot) \approx g(\cdot,\cdot)$ can be used</li>
+            <ul>
+                <li>Traditionally a Gaussian process surrogate model</li>
+            </ul>
+        </ul>
+    </section>
+    
+    <section data-header="Bayesian Model Calibration [Data Model]" data-auto-animate>
+        <h2>Data Model</h2>
+        If the observational errors, $\varepsilon$, are independent and identically distributed from a Gaussian distribution,
+        the data can be represented by a multivariate normal distribution
+
+        $$\mathbf{y}|\mathbf{X} \sim \textrm{MVN} \Big\{ \big[ \eta(\mathbf{X},\boldsymbol{\theta}) + \delta(\mathbf{X}) \big], \sigma^2 \mathbf{I} \Big\}$$
+    </section>
+
+    <section data-header="Bayesian Model Calibration [Data Model]" data-auto-animate>
+        <h2>Data Model</h2>
+        This gives the joint conditional distribution of the data (the likelihood)
+        $$\begin{align*}
+        \pi(\mathbf{Y}|\boldsymbol{\theta},\boldsymbol{\delta},\sigma^2,\tau^2,\boldsymbol{\rho},\mathbf{X}) \propto \prod_{j=1}^m \bigg[ \left( 2\pi \sigma^2\right)^{-n/2}\\
+        \exp \left\{- \frac{1}{2\sigma^2} \big[\mathbf{y}_j-\boldsymbol{\eta}-\boldsymbol{\delta}\big]^T\big[\mathbf{y}_j-\boldsymbol{\eta}-\boldsymbol{\delta}\big]\right\}
+        \bigg]
+        \end{align*}
+        $$
+    </section>
+
+    <!--
+    <section data-header="Bayesian Model Calibration">
+        <h2>Prior Distributions</h2>
+        $$\theta \sim \textrm{U}(\min \theta_{\eta},\max \theta_{\eta})$$
+        $$\sigma^2 \sim \textrm{IG}(1\textrm{E-}9,1\textrm{E-}9)$$
+        $$\tau^2 \sim \textrm{IG}(1\textrm{E-}9,1\textrm{E-}9)$$
+        $$\delta \sim \textrm{GP}(\boldsymbol{0},\boldsymbol{\Sigma})$$
+        $$\rho \sim \textrm{Beta}(1,1)$$
+    </section>
+    -->
+
+    <section data-header="Bayesian Model Calibration [Posterior]">
+        <h2>Posterior Evaluation</h2>
+        The joint posterior distribution is given by
+
+        $$\small
+        \begin{align*}
+        \pi(\boldsymbol{\theta},\boldsymbol{\delta},\sigma^2,\tau^2,\boldsymbol{\rho}|\mathbf{Y},\mathbf{X})\propto \pi(\mathbf{Y}|\boldsymbol{\theta},\boldsymbol{\delta},\sigma^2,\tau^2,\boldsymbol{\rho},\mathbf{X})\\
+        \times \pi(\boldsymbol{\theta})\times \pi(\boldsymbol{\delta})\times \pi(\sigma^2)\times \pi(\tau^2)\times \pi(\boldsymbol{\rho})
+        \end{align*}
+        $$
+        MCMC can be used to draw samples from the posterior distributions
+        <!--
+        Markov chain Monte Carlo simulation can be used to draw samples from the posterior distributions
+        <ul>
+            <li>Standard Gibbs updates for $\sigma^2$, $\tau^2$, and $\boldsymbol{\delta}$</li>
+            <li>Metropolis-Hastings updates for $\boldsymbol{\theta}$ and $\boldsymbol{\rho}$</li>
+        </ul>
+        -->
+    </section>
+</section>

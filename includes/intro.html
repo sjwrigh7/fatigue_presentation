@@ -1,0 +1,240 @@
+<section>
+    <section>
+        <h1>Introduction</h1>
+    </section>
+    <section data-header="Introduction [Motivation]">
+        <h2>Piston Fatigue</h2>
+
+        <div class=figcols>
+        
+            <div style="width: 130%; height: auto;">
+                <p>Fatigue failure is the primary concern for failure of internal combustion engine (ICE) pistons due to cyclic thermal and mechanical loads
+                </p>
+                <ul>
+                    <li>Combustion pressure</li>
+                    <li>Heat softening</li>
+                    <li>Thermal stresses</li>
+                </ul>
+            </div>
+            <div>
+                <div class="figcols">
+                    <div class="figure">
+                        <img src="https://www.renntech.org/uploads/monthly_08_2008/post-4-1219793789_thumb.jpg">
+                    </div>
+                
+                    <div class="figure">
+                        <img src="https://www.aa1car.com/library/diesel_piston_damage.jpg">
+                    </div>
+                </div>
+                <div class="figure" style="width: 110%; height: auto;">
+                    <img src="https://ars.els-cdn.com/content/image/1-s2.0-S1350630705000580-gr4.jpg">
+                    <figcaption>Example piston failures [1,2,3].</figcaption>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section data-header="Introduction [Motivation]" data-auto-animate>
+        <h2>Piston Modeling</h2>
+        <div class="figcols">
+            <div style="width: 80%;">
+                <p>
+                    Computer models can be used
+                </p>
+                <ul>
+                    <li>Computational fluid dynamics (CFD) for combustion heat transfer and pressure</li>
+                    <li>Finite element analysis (FEA) of piston temperature and stress</li>
+                </ul>
+            </div>
+            <div class="figure">
+                <img src="assets/figures/intro/fem_results.png">
+            </div>
+        </div>
+    </section>
+
+    <section data-header="Introduction [Motivation]" data-auto-animate>
+        <h2>Piston Modeling</h2>
+        <div class="figcols">
+            <div style="width: 80%;">
+                Requires specification of necessary parameters
+                <ul>
+                    <li>Temperature dependent material properites</li>
+                    <li>Thermal boundary conditions</li>
+                    <li>Material fatigue characteristics</li>
+                </ul>
+            </div>
+            <div class="figure">
+                <img src="assets/figures/intro/fem_results.png">
+            </div>
+        </div>
+    </section>
+
+    <section data-header="Introduction [Motivation]">
+        <h2>Parameter Uncertainty</h2>
+        <ul>
+            <li>These parameters must be specified appropriately for the computer model results to be useful</li>
+            <li>Many of these parameters are not fully known</li>
+        </ul>
+        
+    </section>
+
+    <section data-header="Introduction [Background]">
+        <h2>Model Calibration</h2>
+        <!--<p>With so many required input parameters for piston modeling,
+             model calibration can be leveraged to tune these parameters, so the model
+              best represents experimental measurements
+        </p>-->
+        <div class="figcols">
+            <div style="width: 80%;">
+                With so many unknown parameters, we look to rigorous approaches to estimate them
+            </div>
+            <div class="figure">
+                <img src="assets/figures/intro/fem_bcs.png">
+            </div>
+        </div>
+    </section>
+    
+    <section data-header="Introduction [Literature Gaps]" data-auto-animate>
+        <h2>Literature Review</h2>
+        <h4 class="subtitle">Piston model calibration</h4>
+        <ol>
+            <li>Gonera used the inverse heat conduction method [4]</li>
+            <li>Du used wavelet neural networks [5]</li>
+        </ol>
+    </section>
+
+    <section data-header="Introduction [Literature Gaps]" data-auto-animate>
+        <h2>Literature Review</h2>    
+        <h4>Bayesian Model Calibration</h4>
+        <ol>
+            <li>Kennedy and O'Hagan developed a Bayesian model calibration method [6]</li>
+            <li>Multivariate formulation by Higdon et al. [7]</li>
+            <li>Modular approach proposed by Bayarri, Berger, and Liu [8]</li>
+            <li>Tuo and Wu showed the identifiability issues related to the discrepancy term [9]</li>
+        </ol>
+    </section>
+
+    <section data-header="Introduction [Literature Gaps]" data-auto-animate>
+        <h2>Literature Review</h2>    
+        <h4>Bayesian Model Calibration</h4>
+        <ol start="5">
+            <li>Huang et al. improved performance by using on-site surrogates [10]</li>
+            <li>Konomi used a Bayesian tree approach [11]</li>
+            <li>Pratola and Higdon used a Bayesian additive regression tree approach with a novel discrepancy term implementation [12]</li>
+        </ol>
+    </section>
+
+    <section data-header="Introduction [Literature Gaps]" data-auto-animate>
+        <h2>Literature Gaps</h2>
+        <h4 class="subtitle">Bayesian calibration of piston models</h4>
+        <ol>
+            <li><b>Computational efficiency</b></li>
+            <li><b>Identifiability issues due to the discrepancy term</b></li>
+            <li><b>Optimal step size for Metropolis-Hastings updates</b></li>
+        </ol>
+    </section>
+
+    <section data-header="Introduction [Literature Gaps]" data-auto-animate>
+        <h2>Literature Review</h2>
+        <h4>Sensor optimization for model calibration</h4>
+        <ol>
+            <li>Jo et al. used a genetic algorithm to find optimal sensor locations for field data reconstruction with gappy proper orthogonal decomposition [13]</li>
+            <li>Holland et al. [14], Kammer [15], and Penny, Friswell, and Garvey [16] used Fisher information D-optimality to optimize sensor location for modal identification</li>
+        </ol>
+    </section>
+
+    <section data-header="Introduction [Literature Gaps]" data-auto-animate>
+        <h2>Literature Gaps</h2>
+        <h4 class="subtitle">Sensor optimization for model calibration</h4>
+        <ol>
+            <li><b>Efficient space exploration to optimize Fisher information</b></li>
+            <li><b>Univariate Fisher information for efficiency</b></li>
+            <li><b>Methodology for exploring complicated domains (piston geometry)</b></li>
+        </ol>
+    </section>
+
+    <section data-header="Introduction [Literature Gaps]" data-auto-animate>
+        <h2>Literature Review</h2>
+        <h4 class="subtitle">Piston fatigue analysis</h4>
+        <p>Constant loading amplitude</p>
+        <ol>
+            <li>Guida and Penta [17] and Liu et al. [18] used Bayesian analysis of fatigue data.</li>
+            <li>Karolczuk and Stonski used a Gaussian process to achieve non-parametric estimation of $S$-$N$ curves [19]</li>
+            <li>Liu and Lu used a survival analysis approach to model fatigue data [20]</li>
+        </ol>
+    </section>
+
+    <section data-header="Introduction [Literature Gaps]" data-auto-animate>
+        <h2>Literature Review</h2>
+        <h4 class="subtitle">Piston fatigue analysis</h4>
+        <p>Constant loading amplitude</p>
+        <ol start="4">
+            <li>Feng et al used a physics-informed neural network to estimate probabilistic $S$-$N$ curves [21]</li>
+            <li>Chiachio et al. used a Markov chain framework to non-parametrically estimate fatigue damage and failure [22]</li>
+        </ol>
+    </section>
+
+    <section data-header="Introduction [Literature Gaps]" data-auto-animate>
+        <h2>Literature Review</h2>
+        <h4 class="subtitle">Piston fatigue analysis</h4>
+        <p>Constant loading amplitude</p>
+        <ol start="6">
+            <li>Frie et al. used Bayesian optimal experiment design to select constant amplitude test designs for a parametric model [23]</li>
+        </ol>
+    </section>
+
+    <section data-header="Introduction [Literature Gaps]" data-auto-animate>
+        <h2>Literature Review</h2>
+        <h4>Piston fatigue analysis</h4>
+        <p>Variable loading amplitude</p>
+        <ol>
+            <li>Klemenc and Nagode [24] and Ahlqvist et al.[25] presented methods for analyzing variable load amplitude fatigue data </li>
+            <li>Magazzeni et al. used Bayesian optimal experiment design to design variable load amplitude tests for a parametric model [26]</li>
+        </ol>
+    </section>
+
+    <section data-header="Introduction [Literature Gaps]" data-auto-animate>
+        <h2>Literature Gaps</h2>
+        <h4>Piston fatigue analysis</h4>
+        <ol>
+            <li><b>Non-parametric estimation of $S$-$N$ curve for variable amplitude data</b></li>
+            <li><b>Optimal experiment design of variable load amplitude tests for a non-parametric model</b></li>
+        </ol>
+    </section>
+
+    <section data-header="Introduction [Research Objectives]" data-auto-animate>
+        <h2>Research Objectives</h2>
+        <ol style="font-size: 28pt;">
+            <li>Development of an efficient Bayesian model calibration algorithm</li>
+            <ol style="list-style-type: lower-roman">
+                <li>Griddy Gibbs sampling scheme for improved computational efficiency</li>
+                <li>Integrated discrepancy for improved stability</li>
+                <li>Circumvent concerns about Metropolis-Hastings step sizes by use of griddy Gibbs updates</li>
+            </ol>
+        </ol>
+    </section>
+
+    <section data-header="Introduction [Research Objectives]" data-auto-animate>
+        <h2>Research Objectives</h2>
+        <ol start="2" style="font-size: 28pt;">
+            <li>Optimization of sensor location in a piston</li>
+            <ol style="list-style-type: lower-roman">
+                <li>Minimization of asymptotic variance of calibrated parameter estimates</li>
+                <li>Efficient exploration of optimization space with a genetic algorithm</li>
+                <li>Efficient fitness calculation for genetic algorithm</li>
+            </ol>
+        </ol>
+    </section>
+
+    <section data-header="Introduction [Research Objectives]" data-auto-animate>
+        <h2>Research Objectives</h2>
+        <ol start="3" style="font-size: 28pt;">
+            <li>Fatigue data analysis</li>
+            <ol style="list-style-type: lower-roman">
+                <li>Non-parametric modeling of both $S$-$N$ curve and cumulative damage mechanism</li>
+                <li>Bayesian optimal experiment design of variable load amplitude data for non-parametric model</li>
+                <li>Alternative variable load amplitude testing with decreasing stress over time</li>
+            </ol>
+        </ol>
+    </section>
+</section>
